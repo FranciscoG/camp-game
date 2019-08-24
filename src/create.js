@@ -1,5 +1,5 @@
 import globals from "./global.js";
-import collectCoin from "./collect-coin.js"
+// import collectCoin from "./collect-coin.js"
 
 export default function create() {
   globals.keys = this.input.keyboard.createCursorKeys();
@@ -14,41 +14,41 @@ export default function create() {
   globals.groundLayer.setCollisionByExclusion([-1]);
 
   // coin image used as tileset
-  var coinTiles = globals.map.addTilesetImage('coin');
+//   var coinTiles = globals.map.addTilesetImage('coin');
   // add coins as tiles
-  globals.coinLayer = globals.map.createDynamicLayer('Coins', coinTiles, 0, 0);
+//   globals.coinLayer = globals.map.createDynamicLayer('Coins', coinTiles, 0, 0);
 
   // set the boundaries of our game world
   this.physics.world.bounds.width = globals.groundLayer.width;
   this.physics.world.bounds.height = globals.groundLayer.height;
 
   // create the player sprite    
-  globals.player = this.physics.add.sprite(200, 200, 'player');
-  globals.player.setBounce(0.2); // our player will bounce from items
+  globals.player = this.physics.add.sprite( 16, 16, 'player');
+  globals.player.setBounce(0.1); // our player will bounce from items
   globals.player.setCollideWorldBounds(true); // don't go out of the map    
   
   // small fix to our player images, we resize the physics body object slightly
-  globals.player.body.setSize(globals.player.width, globals.player.height-8);
+//   globals.player.body.setSize(globals.player.width, globals.player.height-8);
   
   // player will collide with the level tiles 
   this.physics.add.collider(globals.groundLayer, globals.player);
 
-  globals.coinLayer.setTileIndexCallback(17, collectCoin, this);
+//   globals.coinLayer.setTileIndexCallback(17, collectCoin, this);
   // when the player overlaps with a tile with index 17, collectCoin 
   // will be called    
-  this.physics.add.overlap(globals.player, globals.coinLayer);
+//   this.physics.add.overlap(globals.player, globals.coinLayer);
 
   // player walk animation
   this.anims.create({
       key: 'walk',
-      frames: this.anims.generateFrameNames('player', {prefix: 'p1_walk', start: 1, end: 11, zeroPad: 2}),
+      frames: this.anims.generateFrameNames('player', {prefix: 'running', start: 1, end: 3, zeroPad: 2}),
       frameRate: 10,
       repeat: -1
   });
   // idle with only one frame, so repeat is not neaded
   this.anims.create({
       key: 'idle',
-      frames: [{key: 'player', frame: 'p1_stand'}],
+      frames: [{key: 'player', frame: 'standing'}],
       frameRate: 10,
   });
 

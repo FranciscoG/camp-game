@@ -5,13 +5,13 @@ import update from "./update"
 
 var config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 380,
+  height: 240,
   physics: {
     default: "arcade",
     arcade: {
       gravity: { y: 500 },
-      debug: false
+      debug: true
     }
   },
   scene: {
