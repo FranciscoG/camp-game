@@ -2,54 +2,81 @@ import globals from "./global.js";
 
 export default function create() {
   globals.keys = this.input.keyboard.createCursorKeys();
-  // load the map 
-  globals.map = this.make.tilemap({key: 'map'});
+  // load the map
+  globals.map = this.make.tilemap({ key: "map" });
 
   // tiles for the ground layer
-  var tileset = globals.map.addTilesetImage('tileset');
-  
-  
+  var tileset = globals.map.addTilesetImage("tileset");
+
   // create the world laters
-  globals.barsLayer = globals.map.createDynamicLayer('top_bottom_bars', tileset)
-  globals.bgLayer = globals.map.createDynamicLayer('background', tileset)
-  globals.treesSky = globals.map.createDynamicLayer('trees_sky', tileset)
-  globals.groundLayer = globals.map.createDynamicLayer('platforms', tileset);
+  globals.bgLayer = globals.map.createDynamicLayer("background", tileset);
+  globals.groundLayer = globals.map.createDynamicLayer("platforms", tileset);
 
   // the player will collide with this layer
   globals.groundLayer.setCollisionByExclusion([-1]);
 
   // set the boundaries of our game world
-  this.physics.world.bounds.width = globals.groundLayer.width;
-  this.physics.world.bounds.height = globals.barsLayer.height;
+  this.physics.world.bounds.width = globals.bgLayer.width;
+  this.physics.world.bounds.height = globals.bgLayer.height;
 
-  // create the player sprite    
-  globals.player = this.physics.add.sprite( 16, 16, 'player');
+  // create the player sprite
+  globals.player = this.physics.add.sprite(16, 16, "player");
   globals.player.setBounce(0.1); // our player will bounce from items
-  globals.player.setCollideWorldBounds(true); // don't go out of the map    
-  
-  // small fix to our player images, we resize the physics body object slightly
-  globals.player.body.setSize(globals.player.width, globals.player.height);
-  
-  // player will collide with the level tiles 
-  this.physics.add.collider(globals.groundLayer, globals.player);
+  globals.player.setCollideWorldBounds(true); // don't go out of the map
 
+  // small fix to our player images, we resize the physics body object slightly
+  globals.player.body.setSize(globals.player.width - 8, globals.player.height);
+
+  // player will collide with the level tiles
+  this.physics.add.collider(globals.groundLayer, globals.player);
 
   // player walk animation
   this.anims.create({
-      key: 'running',
-      frames: this.anims.generateFrameNames('player', {prefix: 'running', start: 1, end: 3, zeroPad: 2}),
-      frameRate: 10,
-      repeat: -1
+    key: "running",
+    frames: this.anims.generateFrameNames("player", {
+      prefix: "running",
+      start: 1,
+      end: 3,
+      zeroPad: 2
+    }),
+    frameRate: 10,
+    repeat: -1
   });
+  
   // idle with only one frame, so repeat is not neaded
   this.anims.create({
-      key: 'standing',
-      frames: [{key: 'player', frame: 'standing'}],
-      frameRate: 10
+    key: "standing",
+    frames: [{ key: "player", frame: "standing" }],
+    frameRate: 10
+  });
+
+  //
+  this.anims.create({
+    key: "jump_hold",
+    frames: [{ key: "player", frame: "jump01" }],
+    frameRate: 10
+  })
+
+  // jumping animation
+  this.anims.create({
+    key: "jumping",
+    frames: this.anims.generateFrameNames("player", {
+      prefix: "jump",
+      start: 1,
+      end: 3,
+      zeroPad: 2
+    }),
+    frameRate: 10,
+    repeat: -1
   });
 
   // set bounds so the camera won't go outside the game world
-  this.cameras.main.setBounds(0, 0, globals.map.widthInPixels, globals.map.heightInPixels);
+  this.cameras.main.setBounds(
+    0,
+    0,
+    globals.map.widthInPixels,
+    globals.map.heightInPixels
+  );
   // make the camera follow the player
   this.cameras.main.startFollow(globals.player);
 }

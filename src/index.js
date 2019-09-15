@@ -16,8 +16,8 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
-      debug: true,
+      gravity: { y: 100 },
+      debug: false,
       tileBias: 8
     }
   },
