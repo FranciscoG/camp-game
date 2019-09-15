@@ -2,8 +2,13 @@ export default {
   map: null,
   player: null,
   keys: null,
+  
+  // map layers
+  barsLayer: null,
+  bgLayer: null,
   groundLayer: null,
-  coinLayer: null,
+  treesSky: null,
+
   text: null,
   score: 0
 };

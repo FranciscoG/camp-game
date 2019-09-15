@@ -3,15 +3,22 @@ import preload from "./preload";
 import create from "./create";
 import update from "./update"
 
+// display resolution of the NES is 256 horizontal pixels by 240 vertical pixels.
+// 16 screens long at 128x120
+// tiles are 8px so screen is 16 x 15 tiles
+
 var config = {
   type: Phaser.AUTO,
-  width: 380,
-  height: 240,
+  width: 128,
+  height: 120,
+  pixelArt: true,
+  zoom: 4,
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 500 },
-      debug: true
+      gravity: { y: 200 },
+      debug: true,
+      tileBias: 8
     }
   },
   scene: {
