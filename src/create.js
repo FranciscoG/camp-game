@@ -9,9 +9,10 @@ export default function create() {
   var tileset = globals.map.addTilesetImage("tileset");
 
   // create the world laters
-  globals.bgLayer = globals.map.createDynamicLayer("background", tileset);
+  globals.bgLayer = globals.map.createStaticLayer("background", tileset);
   globals.groundLayer = globals.map.createDynamicLayer("platforms", tileset);
-
+  globals.fgLayer = globals.map.createStaticLayer('foreground', tileset)
+  
   // the player will collide with this layer
   globals.groundLayer.setCollisionByExclusion([-1]);
 
@@ -21,7 +22,7 @@ export default function create() {
 
   // create the player sprite
   globals.player = this.physics.add.sprite(16, 16, "player");
-  globals.player.setBounce(0.1); // our player will bounce from items
+  globals.player.setBounce(0); // our player will bounce from items
   globals.player.setCollideWorldBounds(true); // don't go out of the map
 
   // small fix to our player images, we resize the physics body object slightly
@@ -79,6 +80,8 @@ export default function create() {
   );
   // make the camera follow the player
   this.cameras.main.startFollow(globals.player);
+
+  console.log(globals.fgLayer, globals.map, globals.player)
 }
 
 /*

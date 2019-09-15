@@ -4,11 +4,7 @@ export default {
   keys: null,
   
   // map layers
-  barsLayer: null,
   bgLayer: null,
   groundLayer: null,
-  treesSky: null,
-
-  text: null,
-  score: 0
+  fgLayer: null
 };
