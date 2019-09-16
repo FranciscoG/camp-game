@@ -37,7 +37,7 @@ export default function create() {
     frames: this.anims.generateFrameNames("player", {
       prefix: "running",
       start: 1,
-      end: 3,
+      end: 4,
       zeroPad: 2
     }),
     frameRate: 10,
@@ -51,25 +51,20 @@ export default function create() {
     frameRate: 10
   });
 
-  //
+  // jump in the air pose
   this.anims.create({
-    key: "jump_hold",
-    frames: [{ key: "player", frame: "jump01" }],
+    key: "jump",
+    frames: [{ key: "player", frame: "jump" }],
     frameRate: 10
   })
 
-  // jumping animation
+  // crouch
   this.anims.create({
-    key: "jumping",
-    frames: this.anims.generateFrameNames("player", {
-      prefix: "jump",
-      start: 1,
-      end: 3,
-      zeroPad: 2
-    }),
-    frameRate: 10,
-    repeat: -1
-  });
+    key: "crouch",
+    frames: [{ key: "player", frame: "crouch" }],
+    frameRate: 10
+  })
+
 
   // set bounds so the camera won't go outside the game world
   this.cameras.main.setBounds(
@@ -81,7 +76,7 @@ export default function create() {
   // make the camera follow the player
   this.cameras.main.startFollow(globals.player);
 
-  console.log(globals.fgLayer, globals.map, globals.player)
+  console.log(globals.fgLayer, globals.map, globals.player, globals.bgLayer)
 }
 
 /*
