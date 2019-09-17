@@ -1,7 +1,6 @@
 import Phaser from "phaser";
-import preload from "./preload";
-import create from "./create";
-import update from "./update"
+import {LoadScene} from './scenes/LoadScene'
+import {PlayScene} from './scenes/PlayScene'
 
 // display resolution of the NES is 256 horizontal pixels by 240 vertical pixels.
 // 16 screens long at 128x120
@@ -16,17 +15,15 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 500 },
+      gravity: { y: 120 * 4 },
       debug: false,
       tileBias: 8
     }
   },
-  scene: {
-    key: "main",
-    preload: preload,
-    create: create,
-    update: update
-  }
+  scene: [
+    LoadScene,
+    PlayScene
+  ]
 };
 
 const game = new Phaser.Game(config);
