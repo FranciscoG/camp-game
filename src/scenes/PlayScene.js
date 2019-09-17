@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 
 const worldHeight = 120;
-const gravity = worldHeight * 4 
-const RightRunVelocity = 45
-const LeftRunVelocity = RightRunVelocity * -1
-const JumpVelocity = (gravity/3.5) * -1
+const gravity = worldHeight * 4;
+const RightRunVelocity = 45;
+const LeftRunVelocity = RightRunVelocity * -1;
+const JumpVelocity = (gravity / 3.5) * -1;
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -19,41 +19,11 @@ export class PlayScene extends Phaser.Scene {
     this.groundLayer = null;
     this.fgLayer = null;
 
-    this.player_num = "p2_";
+    this.player_num = "p1_";
   }
 
-  create() {
-    const p_ = this.player_num
-
-    this.keys = this.input.keyboard.createCursorKeys();
-    // load the map
-    this.map = this.make.tilemap({ key: "map" });
-
-    // tiles for the ground layer
-    var tileset = this.map.addTilesetImage("tileset");
-
-    // create the world laters
-    this.bgLayer = this.map.createStaticLayer("background", tileset);
-    this.groundLayer = this.map.createDynamicLayer("platforms", tileset);
-    this.fgLayer = this.map.createStaticLayer("foreground", tileset);
-
-    // the player will collide with this layer
-    this.groundLayer.setCollisionByExclusion([-1]);
-
-    // set the boundaries of our game world
-    this.physics.world.bounds.width = this.bgLayer.width;
-    this.physics.world.bounds.height = this.bgLayer.height;
-
-    // create the player sprite
-    this.player = this.physics.add.sprite(16, 16, "player");
-    this.player.setBounce(0); // our player will bounce from items
-    this.player.setCollideWorldBounds(true); // don't go out of the map
-
-    // small fix to our player images, we resize the physics body object slightly
-    this.player.body.setSize(this.player.width - 8, this.player.height);
-
-    // player will collide with the level tiles
-    this.physics.add.collider(this.groundLayer, this.player);
+  preload() {
+    const p_ = this.player_num;
 
     // player walk animation
     this.anims.create({
@@ -88,13 +58,47 @@ export class PlayScene extends Phaser.Scene {
       frames: [{ key: "player", frame: p_ + "crouch" }],
       frameRate: 10
     });
-    
+
     // hurt
     this.anims.create({
       key: "hurting",
       frames: [{ key: "player", frame: p_ + "hurt" }],
       frameRate: 10
     });
+
+    // load the map
+    this.map = this.make.tilemap({ key: "map" });
+
+    // tiles for the ground layer
+    var tileset = this.map.addTilesetImage("tileset");
+
+    // create the world layers
+    this.bgLayer = this.map.createStaticLayer("background", tileset);
+    this.groundLayer = this.map.createDynamicLayer("platforms", tileset);
+    this.fgLayer = this.map.createStaticLayer("foreground", tileset);
+  }
+
+  create() {
+  
+    this.keys = this.input.keyboard.createCursorKeys();
+    
+    // the player will collide with this layer
+    this.groundLayer.setCollisionByExclusion([-1]);
+
+    // set the boundaries of our game world
+    this.physics.world.bounds.width = this.bgLayer.width;
+    this.physics.world.bounds.height = this.bgLayer.height;
+
+    // create the player sprite
+    this.player = this.physics.add.sprite(16, 16, "player");
+    this.player.setBounce(0); // our player will bounce from items
+    this.player.setCollideWorldBounds(true); // don't go out of the map
+
+    // small fix to our player images, we resize the physics body object slightly
+    this.player.body.setSize(this.player.width - 8, this.player.height);
+
+    // player will collide with the level tiles
+    this.physics.add.collider(this.groundLayer, this.player);
 
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(
@@ -111,23 +115,23 @@ export class PlayScene extends Phaser.Scene {
 
   update(time, delta) {
     var onFloor = this.player.body.onFloor();
-  
+
     if (!onFloor) {
       this.player.anims.play("jumping", true);
       this.player.body.setVelocityX(0);
-    } 
-  
+    }
+
     if (this.keys.left.isDown) {
       this.player.body.setVelocityX(LeftRunVelocity);
       if (onFloor) {
         this.player.anims.play("running", true); // walk left
-      } 
+      }
       this.player.flipX = true; // flip the sprite to the left
     } else if (this.keys.right.isDown) {
       this.player.body.setVelocityX(RightRunVelocity);
       if (onFloor) {
         this.player.anims.play("running", true); // walk left
-      } 
+      }
       this.player.flipX = false; // use the original sprite looking to the right
     } else if (this.keys.down.isDown && onFloor) {
       this.player.anims.play("crouch", true);
@@ -136,7 +140,7 @@ export class PlayScene extends Phaser.Scene {
       this.player.body.setVelocityX(0);
       this.player.anims.play("standing", true);
     }
-  
+
     if (this.keys.up.isDown && onFloor) {
       this.player.body.setVelocityY(JumpVelocity);
     }
