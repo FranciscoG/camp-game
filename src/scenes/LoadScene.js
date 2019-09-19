@@ -31,14 +31,14 @@ export class LoadScene extends Phaser.Scene {
       }
     });
 
+    var barMaxWidth = this.game.renderer.width / 3
     this.load.on("progress", (percent) => {
       loadingBar.fillRect(
-        0,
-        this.game.renderer.height / 2, 
-        this.game.renderer.height * percent,
-        20
+        barMaxWidth,  // x
+        (this.game.renderer.height / 2) - 7,  // y
+        barMaxWidth * percent, // w
+        10 // h
       );
-      console.log(percent);
     })
   }
 

@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
 
 const worldHeight = 120;
 const gravity = worldHeight * 4;
@@ -62,10 +63,25 @@ export class PlayScene extends Phaser.Scene {
     // hurt
     this.anims.create({
       key: "hurting",
-      frames: [{ key: "player", frame: p_ + "hurt" }],
-      frameRate: 10
+      frames: this.anims.generateFrameNames("player", {
+        prefix: p_ + "hurt",
+        start: 1,
+        end: 2,
+        zeroPad: 2
+      }),
+      frameRate: 10,
+      repeat: -1
     });
 
+    this.load.scenePlugin(
+      "animatedTiles",
+      AnimatedTiles,
+      "animatedTiles",
+      "animatedTiles"
+    );
+  }
+
+  create() {
     // load the map
     this.map = this.make.tilemap({ key: "map" });
 
@@ -73,15 +89,14 @@ export class PlayScene extends Phaser.Scene {
     var tileset = this.map.addTilesetImage("tileset");
 
     // create the world layers
-    this.bgLayer = this.map.createStaticLayer("background", tileset);
+    this.bgLayer = this.map.createDynamicLayer("background", tileset);
     this.groundLayer = this.map.createDynamicLayer("platforms", tileset);
-    this.fgLayer = this.map.createStaticLayer("foreground", tileset);
-  }
+    this.fgLayer = this.map.createDynamicLayer("foreground", tileset);
 
-  create() {
-  
+    this.sys.animatedTiles.init(this.map);
+
     this.keys = this.input.keyboard.createCursorKeys();
-    
+
     // the player will collide with this layer
     this.groundLayer.setCollisionByExclusion([-1]);
 

@@ -1,19 +1,23 @@
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   mode: "development",
+  entry: {
+    vendor: ["phaser"],
+    main: path.resolve(__dirname, "../src/index.js")
+  },
   devtool: "eval-source-map",
   output: {
-    path: path.resolve(__dirname, "../game"),
+    path: path.resolve(__dirname, "../game")
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         use: {
           loader: "babel-loader"
         }
@@ -24,13 +28,13 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|ico|svg|pvr|pkm|wav|mp3|webm)$/,
-        use: ['file-loader?name=assets/[name].[ext]?[hash]'],
+        use: ["file-loader?name=assets/[name].[ext]?[hash]"]
       },
       {
-        type: 'javascript/auto',
-        test: /\.json$/,
-        use: [ 'file-loader' ]
-     }
+        type: "javascript/auto",
+        test: [/\.json$/],
+        use: ["file-loader"]
+      }
     ]
   },
   plugins: [
@@ -40,7 +44,10 @@ module.exports = {
       WEBGL_RENDERER: JSON.stringify(true)
     }),
     new HtmlWebpackPlugin({
-      template: "./index.html"
+      template: "./index.html",
+      chunks: ["vendor", "main"],
+      chunksSortMode: "manual",
+      hash: false
     })
   ]
 };
