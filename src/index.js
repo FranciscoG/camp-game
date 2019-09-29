@@ -1,9 +1,10 @@
 import Phaser from "phaser";
 import {LoadScene} from './scenes/LoadScene'
 import {PlayScene} from './scenes/PlayScene'
+import {MenuScene} from './scenes/MenuScene'
 
 // display resolution of the NES is 256 horizontal pixels by 240 vertical pixels.
-// 16 screens long at 128x120
+// the map os 16 screens long at 128x120 (half NES)
 // tiles are 8px so screen is 16 x 15 tiles
 
 var config = {
@@ -22,6 +23,7 @@ var config = {
   },
   scene: [
     LoadScene,
+    MenuScene,
     PlayScene
   ]
 };

@@ -20,11 +20,17 @@ export class PlayScene extends Phaser.Scene {
     this.groundLayer = null;
     this.fgLayer = null;
 
-    this.player_num = "p1_";
+    this.playerNum = 1;
+    this.dying = false
+  }
+
+  init(data) {
+    console.log("play init data=", data)
+    this.playerNum = data.playerNum;
   }
 
   preload() {
-    const p_ = this.player_num;
+    const p_ = `p${this.playerNum}_`
 
     // player walk animation
     this.anims.create({
@@ -161,7 +167,18 @@ export class PlayScene extends Phaser.Scene {
     }
     // if player y is greater 88, kill player
     if (this.player.y > 88) {
-      // this.player
+      this.player.body.setVelocityX(0);
+      this.player.anims.play("hurting", true);
+      this.startOver()
+    }
+  }
+
+  startOver() {
+    if (!this.dying) {
+      this.dying = true
+      setTimeout(() => {
+        this.scene.start("PLAY", {playerNum: this.playerNum} );
+      }, 3000) 
     }
   }
 }
