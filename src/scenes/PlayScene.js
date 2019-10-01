@@ -43,6 +43,17 @@ export class PlayScene extends Phaser.Scene {
     this.bgLayer = this.map.createDynamicLayer("background", tileset);
     this.groundLayer = this.map.createDynamicLayer("platforms", tileset);
     this.fgLayer = this.map.createDynamicLayer("foreground", tileset);
+    this.fgLayer.setDepth(1);
+
+    this.deadly = this.physics.add.staticGroup();
+
+    this.waterLayer = this.map.createFromObjects("killer_env", 49, { key: "water"})
+    console.log(this.waterLayer)
+    this.waterLayer.forEach( tile => {
+      const water = this.deadly.create(tile.x, tile.y, "water");
+      water.body.setSize(8, 8)
+      this.bgLayer.removeTileAt(tile.x, tile.y);
+    })
 
     this.sys.animatedTiles.init(this.map);
 
@@ -57,7 +68,7 @@ export class PlayScene extends Phaser.Scene {
 
     // create the player sprite
     this.player = new PlayerSprite(this, 16, 16, this.playerNum);
-    this.player.usePhysics()
+    this.player.usePhysics();
     this.player.setupAnimations();
 
     // player will collide with the level tiles
@@ -78,6 +89,9 @@ export class PlayScene extends Phaser.Scene {
 
   update(time, delta) {
     this.player.update(this.keys, this.startOver.bind(this));
+    if (this.physics.world.overlap(this.player, this.deadly)) {
+      console.log("player be dead")
+    }
   }
 
   startOver() {

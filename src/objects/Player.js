@@ -149,10 +149,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.beginJump()
     }
     // if player y is greater 88, kill player
-    if (this.y > 88) {
-      this.hurting()
-      onDeath()
-      this.dying = true
-    }
+    // if (this.y > 88) {
+    //   this.hurting()
+    //   onDeath()
+    //   this.dying = true
+    // }
   }
 }
