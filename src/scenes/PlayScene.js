@@ -1,11 +1,6 @@
 import Phaser from "phaser";
 import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
-
-const worldHeight = 120;
-const gravity = worldHeight * 4;
-const RightRunVelocity = 45;
-const LeftRunVelocity = RightRunVelocity * -1;
-const JumpVelocity = (gravity / 3.5) * -1;
+import PlayerSprite from "../objects/Player";
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -21,64 +16,14 @@ export class PlayScene extends Phaser.Scene {
     this.fgLayer = null;
 
     this.playerNum = 1;
-    this.dying = false
   }
 
   init(data) {
-    console.log("play init data=", data)
+    console.log("play init data=", data);
     this.playerNum = data.playerNum;
   }
 
   preload() {
-    const p_ = `p${this.playerNum}_`
-
-    // player walk animation
-    this.anims.create({
-      key: "running",
-      frames: this.anims.generateFrameNames("player", {
-        prefix: p_ + "run",
-        start: 1,
-        end: 4,
-        zeroPad: 2
-      }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    // idle with only one frame, so repeat is not neaded
-    this.anims.create({
-      key: "standing",
-      frames: [{ key: "player", frame: p_ + "stand" }],
-      frameRate: 10
-    });
-
-    // jump in the air pose
-    this.anims.create({
-      key: "jumping",
-      frames: [{ key: "player", frame: p_ + "jump" }],
-      frameRate: 10
-    });
-
-    // crouch
-    this.anims.create({
-      key: "crouch",
-      frames: [{ key: "player", frame: p_ + "crouch" }],
-      frameRate: 10
-    });
-
-    // hurt
-    this.anims.create({
-      key: "hurting",
-      frames: this.anims.generateFrameNames("player", {
-        prefix: p_ + "hurt",
-        start: 1,
-        end: 2,
-        zeroPad: 2
-      }),
-      frameRate: 10,
-      repeat: -1
-    });
-
     this.load.scenePlugin(
       "animatedTiles",
       AnimatedTiles,
@@ -111,12 +56,8 @@ export class PlayScene extends Phaser.Scene {
     this.physics.world.bounds.height = this.bgLayer.height;
 
     // create the player sprite
-    this.player = this.physics.add.sprite(16, 16, "player");
-    this.player.setBounce(0); // our player will bounce from items
-    this.player.setCollideWorldBounds(true); // don't go out of the map
-
-    // small fix to our player images, we resize the physics body object slightly
-    this.player.body.setSize(this.player.width - 8, this.player.height);
+    this.player = new PlayerSprite(this, 16, 16, "player");
+    this.player.setupAnimations(this.playerNum);
 
     // player will collide with the level tiles
     this.physics.add.collider(this.groundLayer, this.player);
@@ -135,51 +76,13 @@ export class PlayScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    var onFloor = this.player.body.onFloor();
-
-    if (!onFloor) {
-      this.player.anims.play("jumping", true);
-      this.player.body.setVelocityX(0);
-    }
-
-    if (this.keys.left.isDown) {
-      this.player.body.setVelocityX(LeftRunVelocity);
-      if (onFloor) {
-        this.player.anims.play("running", true); // walk left
-      }
-      this.player.flipX = true; // flip the sprite to the left
-    } else if (this.keys.right.isDown) {
-      this.player.body.setVelocityX(RightRunVelocity);
-      if (onFloor) {
-        this.player.anims.play("running", true); // walk left
-      }
-      this.player.flipX = false; // use the original sprite looking to the right
-    } else if (this.keys.down.isDown && onFloor) {
-      this.player.anims.play("crouch", true);
-      this.player.body.setVelocityX(0);
-    } else if (onFloor) {
-      this.player.body.setVelocityX(0);
-      this.player.anims.play("standing", true);
-    }
-
-    if (this.keys.up.isDown && onFloor) {
-      this.player.body.setVelocityY(JumpVelocity);
-    }
-    // if player y is greater 88, kill player
-    if (this.player.y > 88) {
-      this.player.body.setVelocityX(0);
-      this.player.anims.play("hurting", true);
-      this.startOver()
-    }
+    this.player.update(this.keys, this.startOver.bind(this));
   }
 
   startOver() {
-    if (!this.dying) {
-      this.dying = true
-      setTimeout(() => {
-        this.scene.start("PLAY", {playerNum: this.playerNum} );
-      }, 3000) 
-    }
+    setTimeout(() => {
+      this.scene.start("PLAY", { playerNum: this.playerNum });
+    }, 2000);
   }
 }
 
