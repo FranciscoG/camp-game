@@ -7,32 +7,30 @@ const LeftRunVelocity = RightRunVelocity * -1;
 const JumpVelocity = (gravity / 3.5) * -1;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, playerNum) {
     console.log("constructing new player")
     super(scene, x, y, "player");
     scene.add.existing(this);
-    scene.physics.add.existing(this);
+    this.scene = scene;
+    this.dying = false
+    this.playerNum = playerNum
+  }
 
+  usePhysics() {
+    this.scene.physics.add.existing(this);
     this.setCollideWorldBounds(true); // don't go out of the map
     this.setBounce(0);
-    // small fix to our player images, we resize the physics body object slightly
-    this.body.setSize(this.width - 8, this.height);
-
     // small fix to our player images, we resize the physics
     // body object slightly
     this.body.setSize(this.width - 8, this.height);
-
-    this.scene = scene;
-
-    this.dying = false
   }
 
-  setupAnimations(num) {
-    const p_ = `p${num}_`;
+  setupAnimations() {
+    const num = this.playerNum
 
     // player walk animation
     this.scene.anims.create({
-      key: "running",
+      key: `running_${num}`,
       frames: this.scene.anims.generateFrameNames("player", {
         prefix: `p${num}_run`,
         start: 1,
@@ -45,28 +43,28 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // idle with only one frame, so repeat is not neaded
     this.scene.anims.create({
-      key: "standing",
+      key: `standing_${num}`,
       frames: [{ key: "player", frame: `p${num}_stand` }],
       frameRate: 10
     });
 
     // jump in the air pose
     this.scene.anims.create({
-      key: "jumping",
+      key: `jumping_${num}`,
       frames: [{ key: "player", frame: `p${num}_jump` }],
       frameRate: 10
     });
 
     // crouch
     this.scene.anims.create({
-      key: "crouch",
+      key: `crouch_${num}`,
       frames: [{ key: "player", frame: `p${num}_crouch` }],
       frameRate: 10
     });
 
     // hurt
     this.scene.anims.create({
-      key: "hurting",
+      key: `hurting_${num}`,
       frames: this.scene.anims.generateFrameNames("player", {
         prefix: `p${num}_hurt`,
         start: 1,
@@ -83,19 +81,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   jumping() {
-    this.anims.play("jumping", true);
+    this.anims.play(`jumping_${this.playerNum}`, true);
     this.body.setVelocityX(0);
   }
 
   stand() {
+    this.anims.play(`standing_${this.playerNum}`, true);
+  }
+
+  stopMoving() {
     this.body.setVelocityX(0);
-    this.anims.play("standing", true);
+  }
+
+  running() {
+    this.anims.play(`running_${this.playerNum}`, true);
   }
 
   moveLeft(onFloor) {
     this.body.setVelocityX(LeftRunVelocity);
     if (onFloor) {
-      this.anims.play("running", true); // walk left
+      this.running()
     }
     this.flipX = true; // flip the sprite to the left
   }
@@ -103,19 +108,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   moveRight(onFloor) {
     this.body.setVelocityX(RightRunVelocity);
     if (onFloor) {
-      this.anims.play("running", true); // walk left
+      this.running()
     }
     this.flipX = false; // use the original sprite looking to the right
   }
 
   crouch() {
-    this.anims.play("crouch", true);
+    this.anims.play(`crouch_${this.playerNum}`, true);
     this.body.setVelocityX(0);
   }
 
   hurting() {
     this.body.setVelocityX(0);
-    this.anims.play("hurting", true);
+    this.anims.play(`hurting_${this.playerNum}`, true);
   }
 
   update(keys, onDeath) {
@@ -137,6 +142,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.crouch()
     } else if (onFloor) {
       this.stand()
+      this.stopMoving()
     }
 
     if (keys.up.isDown && onFloor) {

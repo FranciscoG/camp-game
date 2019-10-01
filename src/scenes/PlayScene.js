@@ -56,8 +56,9 @@ export class PlayScene extends Phaser.Scene {
     this.physics.world.bounds.height = this.bgLayer.height;
 
     // create the player sprite
-    this.player = new PlayerSprite(this, 16, 16, "player");
-    this.player.setupAnimations(this.playerNum);
+    this.player = new PlayerSprite(this, 16, 16, this.playerNum);
+    this.player.usePhysics()
+    this.player.setupAnimations();
 
     // player will collide with the level tiles
     this.physics.add.collider(this.groundLayer, this.player);
@@ -82,7 +83,7 @@ export class PlayScene extends Phaser.Scene {
   startOver() {
     setTimeout(() => {
       this.scene.start("PLAY", { playerNum: this.playerNum });
-    }, 2000);
+    }, 1500);
   }
 }
 
