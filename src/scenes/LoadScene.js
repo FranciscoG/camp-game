@@ -3,6 +3,8 @@ import campMap from "../assets/camp.json"
 import campMapTiles from "../assets/tileset.png"
 import playersSprites from "../assets/player-sprite-sheet.png"
 import playersJson from "../assets/player-sprites.json"
+import mainScreensSprites from "../assets/main_screens.png"
+import mainScreensJson from "../assets/main_screens.json"
 
 export class LoadScene extends Phaser.Scene {
   constructor() {
@@ -12,6 +14,9 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload() {
+    // main screens (title, player select, credits)
+    this.load.atlas("main_screens", mainScreensSprites, mainScreensJson)
+
     // map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", campMap);
 
@@ -23,6 +28,7 @@ export class LoadScene extends Phaser.Scene {
 
     // player animations
     this.load.atlas("player", playersSprites, playersJson);
+
 
     //create loading bar
     let loadingBar = this.add.graphics({
@@ -43,6 +49,6 @@ export class LoadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("MENU");
+    this.scene.start("TITLE");
   }
 }

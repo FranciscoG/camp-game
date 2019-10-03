@@ -45,14 +45,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.anims.create({
       key: `standing_${num}`,
       frames: [{ key: "player", frame: `p${num}_stand` }],
-      frameRate: 10
+      frameRate: 1
     });
 
     // jump in the air pose
     this.scene.anims.create({
       key: `jumping_${num}`,
       frames: [{ key: "player", frame: `p${num}_jump` }],
-      frameRate: 10
+      frameRate: 1
     });
 
     // crouch
