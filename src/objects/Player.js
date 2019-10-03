@@ -44,22 +44,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // idle with only one frame, so repeat is not neaded
     this.scene.anims.create({
       key: `standing_${num}`,
-      frames: [{ key: "player", frame: `p${num}_stand` }],
-      frameRate: 1
+      frames: [{ key: "player", frame: `p${num}_stand` }]
     });
 
     // jump in the air pose
     this.scene.anims.create({
       key: `jumping_${num}`,
-      frames: [{ key: "player", frame: `p${num}_jump` }],
-      frameRate: 1
+      frames: [{ key: "player", frame: `p${num}_jump` }]
     });
 
     // crouch
     this.scene.anims.create({
       key: `crouch_${num}`,
-      frames: [{ key: "player", frame: `p${num}_crouch` }],
-      frameRate: 10
+      frames: [{ key: "player", frame: `p${num}_crouch` }]
     });
 
     // hurt
@@ -118,12 +115,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.body.setVelocityX(0);
   }
 
-  hurting() {
+  death() {
+    this.dying = true
     this.body.setVelocityX(0);
     this.anims.play(`hurting_${this.playerNum}`, true);
   }
 
-  update(keys, onDeath) {
+  update(keys) {
     if (this.dying) {
       return;
     }
@@ -148,11 +146,5 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (keys.up.isDown && onFloor) {
       this.beginJump()
     }
-    // if player y is greater 88, kill player
-    // if (this.y > 88) {
-    //   this.hurting()
-    //   onDeath()
-    //   this.dying = true
-    // }
   }
 }

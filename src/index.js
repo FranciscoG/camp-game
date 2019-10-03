@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import {LoadScene} from './scenes/LoadScene'
-import {PlayScene} from './scenes/PlayScene'
-import {MenuScene} from './scenes/MenuScene'
-import TitleScene from './scenes/TitleScene'
+import { LoadScene } from "./scenes/LoadScene";
+import { PlayScene } from "./scenes/PlayScene";
+import { MenuScene } from "./scenes/MenuScene";
+import TitleScene from "./scenes/TitleScene";
 
 // display resolution of the NES is 256 horizontal pixels by 240 vertical pixels.
 // the map os 16 screens long at 128x120 (half NES)
@@ -22,12 +22,7 @@ var config = {
       tileBias: 8
     }
   },
-  scene: [
-    LoadScene,
-    TitleScene,
-    MenuScene,
-    PlayScene
-  ]
+  scene: [LoadScene, TitleScene, MenuScene, PlayScene]
 };
 
 const game = new Phaser.Game(config);

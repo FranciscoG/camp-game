@@ -13,6 +13,8 @@ import items16x16json from "../assets/items-16x16.json"
 import boss from "../assets/boss-sprite.png"
 import bossJson from "../assets/boss-sprite.json"
 
+import waterSpriteSheet from "../assets/water.png"
+
 export class LoadScene extends Phaser.Scene {
   constructor() {
     super({
@@ -21,7 +23,7 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload() {
-    // main screens (title, player select, credits)
+    // main screens (title, player select, credits) and all npc items and stuff
     this.load.atlas("main_screens", mainScreensSprites, mainScreensJson)
     this.load.atlas("items8x8", items8x8, items8x8json)
     this.load.atlas("items16x16", items16x16, items16x16json)
@@ -30,11 +32,17 @@ export class LoadScene extends Phaser.Scene {
     // map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", campMap);
 
-    // tiles in spritesheet
+    // map tiles in spritesheet
     this.load.spritesheet("tileset", campMapTiles, {
       frameWidth: 8,
       frameHeight: 8
     });
+
+    // the water animation
+    this.load.spritesheet("water_sprites", waterSpriteSheet, {
+      frameWidth: 8,
+      frameHeight: 8
+    })
 
     // player animations
     this.load.atlas("player", playersSprites, playersJson);
