@@ -5,22 +5,11 @@ import PlayerSprite from "../objects/Player";
 export class PlayScene extends Phaser.Scene {
   constructor() {
     super({ key: "PLAY" });
-
-    this.map = null;
-    this.player = null;
-    this.keys = null;
-
-    // map layers
-    this.bgLayer = null;
-    this.groundLayer = null;
-    this.fgLayer = null;
-
-    this.playerNum = 1;
   }
 
   init(data) {
     console.log("play init data=", data);
-    this.playerNum = data.playerNum;
+    this.playerNum = data.playerNum || 1;
   }
 
   preload() {
@@ -32,31 +21,64 @@ export class PlayScene extends Phaser.Scene {
     );
   }
 
-  setupWaterAndBones() {
+  setupWaterAndBones(player) {
+    this.deathPits = this.physics.add.staticGroup();
+    const pitObjects = this.map.getObjectLayer("PitObjects");
 
-    this.bgLayer.setTileIndexCallback(50, this.startOver, this);  
-    
-    const water = this.map.getObjectLayer('PitObjects')['objects'].filter(x => x.name === "water");
-    console.log(water)
-    
-    water.forEach(tile => {
-      this.bgLayer.setTileLocationCallback(tile.x, tile.y, tile.width, tile.height, this.startOver, this)
-      this.physics.add.overlap(this.player, tile);
-    })
-    
+    this.anims.create({
+      key: "flow",
+      frames: this.anims.generateFrameNumbers("water_sprites", {
+        start: 0,
+        end: 1
+      }),
+      frameRate: 1,
+      repeat: -1
+    });
 
-    // // this.waterLayer.forEach( tile => {
-    // //   const water = this.pits.create(tile.x, tile.y, "water").setOrigin(0, 0);
-    // //   water.body.setSize(tile.width, tile.height)
-    // // })
-    // this.boneLayer.forEach( tile => {
-    //   this.pits.create(tile.x, tile.y, "bones").setOrigin(0, 0);
-    // })
+    pitObjects.objects.forEach(tile => {
+      let texture = "water_sprites";
+      if (tile.name === "bones") {
+        texture = "blank8x8";
+      }
+      let obj = this.deathPits.create(tile.x, tile.y, texture);
+      obj.setOrigin(0);
+      obj.body.width = tile.width;
+      obj.body.height = tile.height;
+      if (tile.name === "water") {
+        this.anims.play("flow", obj);
+      }
+    });
+
+    this.physics.add.overlap(
+      player,
+      this.deathPits,
+      this.startOver,
+      null,
+      this
+    );
   }
 
-  create() {
-    this.timeout = null
+  setupPlayer() {
+    // get player spawn point
+    const playerSpawn = this.map
+      .getObjectLayer("SpawnPoints")
+      .objects.filter(o => o.name === "player_spawn")[0];
 
+    // create the player sprite
+    this.player = new PlayerSprite(
+      this,
+      playerSpawn.x,
+      playerSpawn.y,
+      this.playerNum
+    );
+    this.player.usePhysics();
+    this.player.setupAnimations();
+
+    // player will collide with the level tiles
+    this.physics.add.collider(this.groundLayer, this.player);
+  }
+
+  setupMap() {
     // load the map
     this.map = this.make.tilemap({ key: "map" });
 
@@ -79,20 +101,14 @@ export class PlayScene extends Phaser.Scene {
     // set the boundaries of our game world
     this.physics.world.bounds.width = this.bgLayer.width;
     this.physics.world.bounds.height = this.bgLayer.height;
+  }
 
-    // get player spawn point
-    const playerSpawn = this.map.getObjectLayer('SpawnPoints')['objects'][0];
-    console.log("playerSpawn",playerSpawn)
+  create() {
+    this.setupMap();
 
-    // create the player sprite
-    this.player = new PlayerSprite(this, playerSpawn.x, playerSpawn.y, this.playerNum);
-    this.player.usePhysics();
-    this.player.setupAnimations();
+    this.setupPlayer();
 
-    // player will collide with the level tiles
-    this.physics.add.collider(this.groundLayer, this.player);
-
-    this.setupWaterAndBones()
+    this.setupWaterAndBones(this.player);
 
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(
@@ -109,16 +125,15 @@ export class PlayScene extends Phaser.Scene {
 
   update(time, delta) {
     this.player.update(this.keys);
-    // if (this.physics.world.overlap(this.player, this.pits) && !this.timeout) {
-    //   this.player.death()
-    //   this.startOver()
-    // }
   }
 
   startOver() {
-    this.player.death()
-    this.timeout = setTimeout(() => {
-      this.scene.start("PLAY", { playerNum: this.playerNum });
+    if (this.deathTimeout) return;
+
+    this.player.death();
+    this.deathTimeout = setTimeout(() => {
+      this.scene.restart();
+      this.deathTimeout = null;
     }, 1500);
   }
 }
