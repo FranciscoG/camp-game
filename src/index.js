@@ -18,7 +18,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 120 * 4 },
-      debug: false,
+      debug: window.location.search === "?debug",
       tileBias: 8
     }
   },
