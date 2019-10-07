@@ -1,7 +1,10 @@
 import Phaser from "phaser";
 import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
 import PlayerSprite from "../objects/Player";
-import Boss from "../objects/Boss"
+import Boss from "../objects/Boss";
+import FlyingItem from "../objects/FlyingItem";
+
+var spawnPointNum = 1
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -32,26 +35,29 @@ export class PlayScene extends Phaser.Scene {
         end: 17,
         zeroPad: 2
       }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: -1,
-      repeatDelay: 3000
+      repeatDelay: 2000
     });
 
     // if index === 3,  height = 16
     // then -- from there until index 18
 
-
     this.spawnPoints.objects
       .filter(f => f.name === "water_hand")
       .forEach(tile => {
-        let obj = this.nonMovingKillers.create(tile.x + 8, tile.y + 8, "items16x16");
+        let obj = this.nonMovingKillers.create(
+          tile.x + 8,
+          tile.y + 8,
+          "items16x16"
+        );
         const hitWidth = tile.width - 10;
         obj.body.setSize(hitWidth, 0);
         this.anims.play("water_hand_rise", obj);
-        obj.on('animationupdate-water_hand_rise', function (anim, frame) {
+        obj.on("animationupdate-water_hand_rise", function(anim, frame) {
           // console.log('water rise', frame)
           if (frame.index >= 3) {
-            obj.body.setSize(hitWidth, 16 - (frame.index - 3) );
+            obj.body.setSize(hitWidth, 16 - (frame.index - 3));
           } else {
             obj.body.setSize(hitWidth, 0);
           }
@@ -83,7 +89,6 @@ export class PlayScene extends Phaser.Scene {
   }
 
   setupWaterAndBones() {
-    this.nonMovingKillers = this.physics.add.staticGroup();
     const pitObjects = this.map.getObjectLayer("PitObjects");
 
     this.anims.create({
@@ -112,15 +117,17 @@ export class PlayScene extends Phaser.Scene {
 
   setupPlayer() {
     // get player spawn point
-    const playerSpawn = this.spawnPoints.objects.filter(
+    this.playerSpawnPoints = this.spawnPoints.objects.filter(
       o => o.name === "player_spawn"
-    )[0];
+    );
+
+    const point = this.playerSpawnPoints.filter(x => parseInt(x.type,10) === spawnPointNum)[0]
 
     // create the player sprite
     this.player = new PlayerSprite(
       this,
-      playerSpawn.x,
-      playerSpawn.y,
+      point.x,
+      point.y,
       this.playerNum
     );
     this.player.usePhysics();
@@ -145,8 +152,6 @@ export class PlayScene extends Phaser.Scene {
 
     this.sys.animatedTiles.init(this.map);
 
-    this.keys = this.input.keyboard.createCursorKeys();
-
     // the player will collide with this layer
     this.groundLayer.setCollisionByExclusion([-1]);
 
@@ -160,30 +165,56 @@ export class PlayScene extends Phaser.Scene {
     const bossSpawn = this.spawnPoints.objects.filter(
       o => o.name === "boss"
     )[0];
-    console.log(bossSpawn)
+    console.log(bossSpawn);
 
     // create the player sprite
-    this.boss = new Boss(
-      this,
-      bossSpawn
-    );
+    this.boss = new Boss(this, bossSpawn);
 
     // player will collide with the level tiles
     this.physics.add.collider(this.groundLayer, this.boss);
   }
 
+  setupFlyingObjects() {
+    this.flyers = this.map
+      .getObjectLayer("SpawnPoints")
+      .objects.filter(x => x.type === "flying_object");
+
+    this.flyingSprites = [];
+    this.flyers.forEach(sprite => {
+      const flyer_sprite = new FlyingItem(this, {
+        x: sprite.x,
+        y: sprite.y,
+        key: sprite.name,
+        prefix: sprite.properties.filter(n => n.name === "prefix")[0].value,
+        size: sprite.width,
+        startFrame: sprite.properties.filter(n => n.name === "startFrame")[0]
+          .value,
+        endFrame: sprite.properties.filter(n => n.name === "endFrame")[0].value
+      });
+      this.flyingSprites.push(flyer_sprite);
+    });
+  }
+
   create() {
+    this.keys = this.input.keyboard.createCursorKeys();
+    this.keys.x = this.input.keyboard.addKey("x");
+    this.keys.space = this.input.keyboard.addKey("space");
+
     this.setupMap();
 
     this.spawnPoints = this.map.getObjectLayer("SpawnPoints");
 
     this.setupPlayer();
 
+    this.nonMovingKillers = this.physics.add.staticGroup();
+    this.movingKillers = this.physics.add.group();
+
     this.setupWaterAndBones();
 
     this.setupCampfire();
-    this.setupWaterHand()
-    this.setupBoss()
+    this.setupWaterHand();
+    this.setupBoss();
+    this.setupFlyingObjects();
 
     this.physics.add.overlap(
       this.player,
@@ -206,18 +237,41 @@ export class PlayScene extends Phaser.Scene {
     console.log(this.fgLayer, this.map, this.player, this.bgLayer);
   }
 
-  update(time, delta) {
-    this.player.update(this.keys);
-    this.boss.update(time, delta)
+  checkSpawnPosition(playerX) {
+    this.playerSpawnPoints.forEach( point => {
+      let type = parseInt(point.type,10);
+      let x = point.x
+      if (playerX > x ) {
+        spawnPointNum = type
+      }
+    })
   }
 
-  startOver() {
+  update(time, delta) {
+    this.player.update(this.keys);
+    this.boss.update(time, delta);
+    this.flyingSprites.forEach(x => x.update(time, delta));
+    this.checkSpawnPosition(this.player.x)
+
+    if (this.cameras.main.scrollX >= 1728) {
+      this.cameras.main.stopFollow()
+    }
+  }
+
+  startOver(sprite1, sprite2) {
     if (this.deathTimeout) return;
+
+    if (sprite1 instanceof FlyingItem) {
+      sprite1.stopFlying()
+    }
+    if (sprite2 instanceof FlyingItem) {
+      sprite2.stopFlying()
+    }
 
     this.player.death();
     this.deathTimeout = setTimeout(() => {
       this.scene.restart();
       this.deathTimeout = null;
-    }, 1500);
+    }, 750);
   }
 }

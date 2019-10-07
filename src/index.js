@@ -9,11 +9,16 @@ import TitleScene from "./scenes/TitleScene";
 // tiles are 8px so screen is 16 x 15 tiles
 
 var config = {
+  parent: 'phaser_game_container',
   type: Phaser.AUTO,
   width: 128,
   height: 120,
   pixelArt: true,
   zoom: 4,
+  scale: {
+    mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
+  },
   physics: {
     default: "arcade",
     arcade: {

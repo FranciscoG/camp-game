@@ -25,6 +25,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.body.setSize(this.width - 8, this.height);
   }
 
+  resetBodySize() {
+    this.body.setSize(this.width - 8, this.height);
+    this.setOffset(4, 0)
+  }
+
   setupAnimations() {
     const num = this.playerNum
 
@@ -113,6 +118,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   crouch() {
     this.anims.play(`crouch_${this.playerNum}`, true);
     this.body.setVelocityX(0);
+    this.body.setSize(this.width - 8, this.height - 6);
+    this.setOffset(4, 6)
   }
 
   death() {
@@ -125,6 +132,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.dying) {
       return;
     }
+    this.resetBodySize()
 
     var onFloor = this.body.onFloor();
 
@@ -143,7 +151,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.stopMoving()
     }
 
-    if (keys.up.isDown && onFloor) {
+    if ((keys.up.isDown || keys.space.isDown) && onFloor) {
       this.beginJump()
     }
   }
