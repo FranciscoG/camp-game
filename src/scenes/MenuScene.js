@@ -7,6 +7,9 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create() {
+    this.scale.setGameSize(128, 120);
+    this.scale.setZoom(4)
+
     this.keys = this.input.keyboard.createCursorKeys()
     this.keys.x = this.input.keyboard.addKey('x')
     this.keys.space = this.input.keyboard.addKey('space')

@@ -14,8 +14,9 @@ import boss from "../assets/boss-sprite.png";
 import bossJson from "../assets/boss-sprite.json";
 
 import waterSpriteSheet from "../assets/water.png";
-
+import locket from "../assets/locket.png"
 import blank from "../assets/blank8x8.png";
+import bookcover from "../assets/book-cover-screen-4x.png"
 
 export class LoadScene extends Phaser.Scene {
   constructor() {
@@ -32,6 +33,8 @@ export class LoadScene extends Phaser.Scene {
     this.load.atlas("boss16x32", boss, bossJson);
 
     this.load.image("blank8x8", blank);
+    this.load.image("locket", locket);
+    this.load.image("bookCover", bookcover)
 
     // map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", campMap);

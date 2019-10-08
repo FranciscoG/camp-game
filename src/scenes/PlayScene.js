@@ -4,7 +4,11 @@ import PlayerSprite from "../objects/Player";
 import Boss from "../objects/Boss";
 import FlyingItem from "../objects/FlyingItem";
 
-var spawnPointNum = 1
+var debugStart = parseInt(location.hash.substring(1), 10)
+if (isNaN(debugStart) || !debugStart) {
+  debugStart = 1;
+}
+var spawnPointNum = debugStart
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -83,7 +87,7 @@ export class PlayScene extends Phaser.Scene {
       .filter(f => f.name === "camp_fire")
       .forEach(tile => {
         let obj = this.nonMovingKillers.create(tile.x, tile.y + 4, "items8x8");
-        obj.body.setSize(tile.width - 2, tile.height);
+        obj.body.setSize(tile.width - 3, tile.height - 1);
         this.anims.play("campfire_burn", obj);
       });
   }
@@ -168,7 +172,7 @@ export class PlayScene extends Phaser.Scene {
     console.log(bossSpawn);
 
     // create the player sprite
-    this.boss = new Boss(this, bossSpawn);
+    this.boss = new Boss(this, bossSpawn, this.addLocket.bind(this));
 
     // player will collide with the level tiles
     this.physics.add.collider(this.groundLayer, this.boss);
@@ -193,6 +197,27 @@ export class PlayScene extends Phaser.Scene {
       });
       this.flyingSprites.push(flyer_sprite);
     });
+  }
+
+  addLocket(x,y) {
+    this.locket = this.physics.add.sprite(x,y - 16, 'locket')
+    this.locket.setCollideWorldBounds(true);
+
+    this.locket.body.setSize(12, 12)
+    this.locket.body.setImmovable(true);
+    this.physics.add.collider(this.locket, this.groundLayer);
+    this.physics.add.overlap(
+      this.locket,
+      this.player,
+      this.grabLocket,
+      null,
+      this
+    );
+  }
+
+  grabLocket() {
+    this.locket.destroy()
+    this.scene.start("BOOK");
   }
 
   create() {

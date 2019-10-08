@@ -476,8 +476,8 @@
                  "type":"flying_object",
                  "visible":true,
                  "width":16,
-                 "x":1368,
-                 "y":64
+                 "x":1472,
+                 "y":56
                 }, 
                 {
                  "height":8,
@@ -531,7 +531,7 @@
                  "type":"6",
                  "visible":true,
                  "width":8,
-                 "x":1416,
+                 "x":1368,
                  "y":8
                 }, 
                 {
@@ -544,6 +544,17 @@
                  "width":8,
                  "x":1736,
                  "y":8
+                }, 
+                {
+                 "height":8,
+                 "id":49,
+                 "name":"camp_fire",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":8,
+                 "x":1416,
+                 "y":80
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -552,7 +563,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":49,
+ "nextobjectid":50,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.4",

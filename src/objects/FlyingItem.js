@@ -99,7 +99,7 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
   beginFlying() {
     this.flying = true;
     this.anims.play(this.animKey, true);
-    this.body.setVelocityX(-45);
+    this.body.setVelocityX(-50);
   }
 
   stopFlying() {

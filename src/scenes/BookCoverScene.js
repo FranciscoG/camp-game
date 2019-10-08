@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
-export default class TestScene extends Phaser.Scene {
+export default class BookCoverScene extends Phaser.Scene {
   constructor() {
-    super({ key: "TEST" });
+    super({ key: "BOOK" });
   }
 
   create() {
@@ -15,7 +15,7 @@ export default class TestScene extends Phaser.Scene {
       enter : this.input.keyboard.addKey('enter')
     }
 
-    this.add.image(520/2, 480/2, "test")
+    this.add.image(520/2, 480/2, "bookCover")
   }
 
   update() {

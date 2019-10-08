@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="232" height="15" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#000000" nextlayerid="23" nextobjectid="49">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="232" height="15" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#000000" nextlayerid="23" nextobjectid="50">
  <tileset firstgid="1" name="tileset" tilewidth="8" tileheight="8" tilecount="225" columns="15">
   <image source="tileset_2.png" width="120" height="120"/>
   <tile id="0" type="empty"/>
@@ -127,7 +127,7 @@
     <property name="startFrame" type="int" value="4"/>
    </properties>
   </object>
-  <object id="42" name="towel" type="flying_object" x="1368" y="64" width="16" height="16">
+  <object id="42" name="towel" type="flying_object" x="1472" y="56" width="16" height="16">
    <properties>
     <property name="endFrame" type="int" value="1"/>
     <property name="prefix" value="towel-"/>
@@ -138,7 +138,8 @@
   <object id="44" name="player_spawn" type="3" x="608" y="8" width="8" height="8"/>
   <object id="45" name="player_spawn" type="4" x="848" y="8" width="8" height="8"/>
   <object id="46" name="player_spawn" type="5" x="1136" y="8" width="8" height="8"/>
-  <object id="47" name="player_spawn" type="6" x="1416" y="8" width="8" height="8"/>
+  <object id="47" name="player_spawn" type="6" x="1368" y="8" width="8" height="8"/>
   <object id="48" name="player_spawn" type="7" x="1736" y="8" width="8" height="8"/>
+  <object id="49" name="camp_fire" x="1416" y="80" width="8" height="8"/>
  </objectgroup>
 </map>
