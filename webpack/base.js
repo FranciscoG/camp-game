@@ -27,7 +27,7 @@ module.exports = {
         use: "raw-loader"
       },
       {
-        test: /\.(png|jpg|gif|ico|svg|pvr|pkm|wav|mp3|webm)$/,
+        test: /\.(png|jpg|gif|ico|svg|pvr|pkm|wav|mp3|webm|fnt)$/,
         use: ["file-loader?name=assets/[name].[ext]?[hash]"]
       },
       {

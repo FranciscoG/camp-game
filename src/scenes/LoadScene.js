@@ -18,6 +18,12 @@ import locket from "../assets/locket.png"
 import blank from "../assets/blank8x8.png";
 import bookcover from "../assets/book-cover-screen-4x.png"
 
+import pixelFontimg from "../assets/font/pixel_font.png"
+import pixelFontJson from "../assets/font/pixel_font.json"
+
+import itemsAndEnemies from "../assets/items_and_enemies.json"
+import itemsAndEnemiesSprite from "../assets/items_and_enemies.png"
+
 export class LoadScene extends Phaser.Scene {
   constructor() {
     super({
@@ -26,11 +32,14 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.multiatlas('itemsAndEnemies', itemsAndEnemies, 'assets');
+
     // main screens (title, player select, credits) and all npc items and stuff
     this.load.atlas("main_screens", mainScreensSprites, mainScreensJson);
     this.load.atlas("items8x8", items8x8, items8x8json);
     this.load.atlas("items16x16", items16x16, items16x16json);
     this.load.atlas("boss16x32", boss, bossJson);
+    this.load.atlas("pixelFont", pixelFontimg, pixelFontJson);
 
     this.load.image("blank8x8", blank);
     this.load.image("locket", locket);

@@ -4,11 +4,11 @@ import PlayerSprite from "../objects/Player";
 import Boss from "../objects/Boss";
 import FlyingItem from "../objects/FlyingItem";
 
-var debugStart = parseInt(location.hash.substring(1), 10)
+var debugStart = parseInt(location.hash.substring(1), 10);
 if (isNaN(debugStart) || !debugStart) {
   debugStart = 1;
 }
-var spawnPointNum = debugStart
+var spawnPointNum = debugStart;
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -70,15 +70,16 @@ export class PlayScene extends Phaser.Scene {
   }
 
   setupCampfire() {
-    // player walk animation
+    const fireFrames = this.anims.generateFrameNames("itemsAndEnemies", {
+      start: 0,
+      end: 3,
+      zeroPad: 1,
+      prefix: "8x8/campfire-sprite-",
+      suffix: ".png"
+    });
     this.anims.create({
       key: "campfire_burn",
-      frames: this.anims.generateFrameNames("items8x8", {
-        prefix: `fire-`,
-        start: 1,
-        end: 4,
-        zeroPad: 2
-      }),
+      frames: fireFrames,
       frameRate: 10,
       repeat: -1
     });
@@ -86,7 +87,7 @@ export class PlayScene extends Phaser.Scene {
     this.spawnPoints.objects
       .filter(f => f.name === "camp_fire")
       .forEach(tile => {
-        let obj = this.nonMovingKillers.create(tile.x, tile.y + 4, "items8x8");
+        let obj = this.nonMovingKillers.create(tile.x, tile.y + 4, "itemsAndEnemies", "8x8/campfire-sprite-0.png");
         obj.body.setSize(tile.width - 3, tile.height - 1);
         this.anims.play("campfire_burn", obj);
       });
@@ -125,15 +126,12 @@ export class PlayScene extends Phaser.Scene {
       o => o.name === "player_spawn"
     );
 
-    const point = this.playerSpawnPoints.filter(x => parseInt(x.type,10) === spawnPointNum)[0]
+    const point = this.playerSpawnPoints.filter(
+      x => parseInt(x.type, 10) === spawnPointNum
+    )[0];
 
     // create the player sprite
-    this.player = new PlayerSprite(
-      this,
-      point.x,
-      point.y,
-      this.playerNum
-    );
+    this.player = new PlayerSprite(this, point.x, point.y, this.playerNum);
     this.player.usePhysics();
     this.player.setupAnimations();
 
@@ -199,11 +197,11 @@ export class PlayScene extends Phaser.Scene {
     });
   }
 
-  addLocket(x,y) {
-    this.locket = this.physics.add.sprite(x,y - 16, 'locket')
+  addLocket(x, y) {
+    this.locket = this.physics.add.sprite(x, y - 16, "locket");
     this.locket.setCollideWorldBounds(true);
 
-    this.locket.body.setSize(12, 12)
+    this.locket.body.setSize(12, 12);
     this.locket.body.setImmovable(true);
     this.physics.add.collider(this.locket, this.groundLayer);
     this.physics.add.overlap(
@@ -216,7 +214,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   grabLocket() {
-    this.locket.destroy()
+    this.locket.destroy();
     this.scene.start("BOOK");
   }
 
@@ -263,23 +261,23 @@ export class PlayScene extends Phaser.Scene {
   }
 
   checkSpawnPosition(playerX) {
-    this.playerSpawnPoints.forEach( point => {
-      let type = parseInt(point.type,10);
-      let x = point.x
-      if (playerX > x ) {
-        spawnPointNum = type
+    this.playerSpawnPoints.forEach(point => {
+      let type = parseInt(point.type, 10);
+      let x = point.x;
+      if (playerX > x) {
+        spawnPointNum = type;
       }
-    })
+    });
   }
 
   update(time, delta) {
     this.player.update(this.keys);
     this.boss.update(time, delta);
     this.flyingSprites.forEach(x => x.update(time, delta));
-    this.checkSpawnPosition(this.player.x)
+    this.checkSpawnPosition(this.player.x);
 
     if (this.cameras.main.scrollX >= 1728) {
-      this.cameras.main.stopFollow()
+      this.cameras.main.stopFollow();
     }
   }
 
@@ -287,10 +285,10 @@ export class PlayScene extends Phaser.Scene {
     if (this.deathTimeout) return;
 
     if (sprite1 instanceof FlyingItem) {
-      sprite1.stopFlying()
+      sprite1.stopFlying();
     }
     if (sprite2 instanceof FlyingItem) {
-      sprite2.stopFlying()
+      sprite2.stopFlying();
     }
 
     this.player.death();
