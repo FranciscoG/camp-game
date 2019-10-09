@@ -73,6 +73,7 @@ export class PlayScene extends Phaser.Scene {
     this.spawnPoints.objects
       .filter(f => f.name === "bead")
       .forEach((bead, i) => {
+        console.log(bead)
         let obj = this.beadGroup.create(
           bead.x,
           bead.y + 2,
@@ -86,7 +87,7 @@ export class PlayScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.beadGroup,
-      this.updateText,
+      this.grabBead,
       null,
       this
     );
@@ -157,6 +158,11 @@ export class PlayScene extends Phaser.Scene {
     // set the boundaries of our game world
     this.physics.world.bounds.width = this.bgLayer.width;
     this.physics.world.bounds.height = this.bgLayer.height;
+
+    // add a black rectangle at the top of the screen
+    this.blackRect = this.add.rectangle(0,0, 256, 32, 0x000000)
+    this.blackRect.setDepth(1);
+    this.blackRect.setScrollFactor(0)
   }
 
   setupBoss() {
@@ -234,12 +240,16 @@ export class PlayScene extends Phaser.Scene {
       Phaser.GameObjects.RetroFont.Parse(this, config)
     );
     
+    const playerName = this.playerNum === 1 ? "TEZ" : "CORRYN"
+    this.add.bitmapText(2, 4, "retro_font", playerName).setScrollFactor(0).setDepth(2);
+
     this.beadCount = 0
-    this.beadText = this.add.bitmapText(0, 0, "retro_font", "BEADS 0");
+    this.beadText = this.add.bitmapText(64, 4, "retro_font", "BEADS 0");
+    this.beadText.setDepth(2)
     this.beadText.setScrollFactor(0)
   }
 
-  updateText(player, beadSprite) {
+  grabBead(player, beadSprite) {
     beadSprite.destroy()
     this.beadCount++
     this.beadText.setText(`BEADS ${this.beadCount}`)
