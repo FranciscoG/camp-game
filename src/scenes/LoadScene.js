@@ -1,28 +1,14 @@
 import Phaser from "phaser";
 import campMap from "../assets/camp.json";
 import campMapTiles from "../assets/tileset.png";
-import playersSprites from "../assets/player-sprite-sheet.png";
-import playersJson from "../assets/player-sprites.json";
 import mainScreensSprites from "../assets/main_screens.png";
 import mainScreensJson from "../assets/main_screens.json";
-
-import items8x8 from "../assets/items-8x8.png";
-import items8x8json from "../assets/items-8x8.json";
-import items16x16 from "../assets/items-16x16.png";
-import items16x16json from "../assets/items-16x16.json";
-import boss from "../assets/boss-sprite.png";
-import bossJson from "../assets/boss-sprite.json";
-
-import waterSpriteSheet from "../assets/water.png";
-import locket from "../assets/locket.png"
-import blank from "../assets/blank8x8.png";
-import bookcover from "../assets/book-cover-screen-4x.png"
-
-import pixelFontimg from "../assets/font/pixel_font.png"
-import pixelFontJson from "../assets/font/pixel_font.json"
-
-import itemsAndEnemies from "../assets/items_and_enemies.json"
-import itemsAndEnemiesSprite from "../assets/items_and_enemies.png"
+import bookcover from "../assets/book-cover-screen-4x.png";
+import pixelFontimg from "../assets/font/pixel_font.png";
+import itemsAndEnemies from "../assets/items_and_enemies.json";
+import "../assets/items_and_enemies.png";
+import mp3 from "../assets/audio/gamemusic.mp3";
+import audioSpriteJson from "../assets/audio/gamemusic.json";
 
 export class LoadScene extends Phaser.Scene {
   constructor() {
@@ -32,20 +18,24 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.multiatlas('itemsAndEnemies', itemsAndEnemies, 'assets');
+    /***********************************************
+     * audio
+     */
+    this.load.audioSprite("music", audioSpriteJson, [mp3]);
+
+    /***********************************************
+     * SpriteSheets and images
+     */
+    this.load.multiatlas("itemsAndEnemies", itemsAndEnemies, "assets");
 
     // main screens (title, player select, credits) and all npc items and stuff
     this.load.atlas("main_screens", mainScreensSprites, mainScreensJson);
-    this.load.atlas("items8x8", items8x8, items8x8json);
-    this.load.atlas("items16x16", items16x16, items16x16json);
-    this.load.atlas("boss16x32", boss, bossJson);
-    this.load.atlas("pixelFont", pixelFontimg, pixelFontJson);
+    this.load.image("bookCover", bookcover);
+    this.load.image("retro_font", pixelFontimg);
 
-    this.load.image("blank8x8", blank);
-    this.load.image("locket", locket);
-    this.load.image("bookCover", bookcover)
-
-    // map made with Tiled in JSON format
+    /***********************************************
+     * Map
+     */
     this.load.tilemapTiledJSON("map", campMap);
 
     // map tiles in spritesheet
@@ -54,16 +44,9 @@ export class LoadScene extends Phaser.Scene {
       frameHeight: 8
     });
 
-    // the water animation
-    this.load.spritesheet("water_sprites", waterSpriteSheet, {
-      frameWidth: 8,
-      frameHeight: 8
-    });
-
-    // player animations
-    this.load.atlas("player", playersSprites, playersJson);
-
-    //create loading bar
+    /***********************************************
+     * Loading Bar
+     */
     let loadingBar = this.add.graphics({
       fillStyle: {
         color: 0xffffff //white

@@ -13,7 +13,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     this.scene = scene;
     this.dying = false
-    this.playerNum = playerNum
   }
 
   usePhysics() {
@@ -30,65 +29,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setOffset(4, 0)
   }
 
-  setupAnimations() {
-    const num = this.playerNum
-
-    // player walk animation
-    this.scene.anims.create({
-      key: `running_${num}`,
-      frames: this.scene.anims.generateFrameNames("player", {
-        prefix: `p${num}_run`,
-        start: 1,
-        end: 4,
-        zeroPad: 2
-      }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    // idle with only one frame, so repeat is not neaded
-    this.scene.anims.create({
-      key: `standing_${num}`,
-      frames: [{ key: "player", frame: `p${num}_stand` }]
-    });
-
-    // jump in the air pose
-    this.scene.anims.create({
-      key: `jumping_${num}`,
-      frames: [{ key: "player", frame: `p${num}_jump` }]
-    });
-
-    // crouch
-    this.scene.anims.create({
-      key: `crouch_${num}`,
-      frames: [{ key: "player", frame: `p${num}_crouch` }]
-    });
-
-    // hurt
-    this.scene.anims.create({
-      key: `hurting_${num}`,
-      frames: this.scene.anims.generateFrameNames("player", {
-        prefix: `p${num}_hurt`,
-        start: 1,
-        end: 2,
-        zeroPad: 2
-      }),
-      frameRate: 10,
-      repeat: -1
-    });
-  }
-
   beginJump() {
     this.body.setVelocityY(JumpVelocity);
   }
 
   jumping() {
-    this.anims.play(`jumping_${this.playerNum}`, true);
+    this.anims.play("player_jump", true);
     this.body.setVelocityX(0);
   }
 
   stand() {
-    this.anims.play(`standing_${this.playerNum}`, true);
+    this.anims.play("player_stand", true);
   }
 
   stopMoving() {
@@ -96,7 +47,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   running() {
-    this.anims.play(`running_${this.playerNum}`, true);
+    this.anims.play("player_run", true);
   }
 
   moveLeft(onFloor) {
@@ -116,7 +67,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   crouch() {
-    this.anims.play(`crouch_${this.playerNum}`, true);
+    this.anims.play("player_crouch", true);
     this.body.setVelocityX(0);
     this.body.setSize(this.width - 8, this.height - 6);
     this.setOffset(4, 6)
@@ -125,7 +76,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   death() {
     this.dying = true
     this.body.setVelocityX(0);
-    this.anims.play(`hurting_${this.playerNum}`, true);
+    this.anims.play("player_hurt", true);
   }
 
   update(keys) {

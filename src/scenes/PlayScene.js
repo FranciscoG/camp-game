@@ -3,6 +3,7 @@ import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
 import PlayerSprite from "../objects/Player";
 import Boss from "../objects/Boss";
 import FlyingItem from "../objects/FlyingItem";
+import setupAnimations from "../objects/animations";
 
 var debugStart = parseInt(location.hash.substring(1), 10);
 if (isNaN(debugStart) || !debugStart) {
@@ -30,36 +31,19 @@ export class PlayScene extends Phaser.Scene {
   }
 
   setupWaterHand() {
-    // player walk animation
-    this.anims.create({
-      key: "water_hand_rise",
-      frames: this.anims.generateFrameNames("items16x16", {
-        prefix: `hand-`,
-        start: 0,
-        end: 17,
-        zeroPad: 2
-      }),
-      frameRate: 10,
-      repeat: -1,
-      repeatDelay: 2000
-    });
-
-    // if index === 3,  height = 16
-    // then -- from there until index 18
-
     this.spawnPoints.objects
       .filter(f => f.name === "water_hand")
       .forEach(tile => {
         let obj = this.nonMovingKillers.create(
           tile.x + 8,
           tile.y + 8,
-          "items16x16"
+          "itemsAndEnemies",
+          "16x16/hand/0.png"
         );
         const hitWidth = tile.width - 10;
         obj.body.setSize(hitWidth, 0);
         this.anims.play("water_hand_rise", obj);
         obj.on("animationupdate-water_hand_rise", function(anim, frame) {
-          // console.log('water rise', frame)
           if (frame.index >= 3) {
             obj.body.setSize(hitWidth, 16 - (frame.index - 3));
           } else {
@@ -70,52 +54,42 @@ export class PlayScene extends Phaser.Scene {
   }
 
   setupCampfire() {
-    const fireFrames = this.anims.generateFrameNames("itemsAndEnemies", {
-      start: 0,
-      end: 3,
-      zeroPad: 1,
-      prefix: "8x8/campfire-sprite-",
-      suffix: ".png"
-    });
-    this.anims.create({
-      key: "campfire_burn",
-      frames: fireFrames,
-      frameRate: 10,
-      repeat: -1
-    });
-
     this.spawnPoints.objects
       .filter(f => f.name === "camp_fire")
       .forEach(tile => {
-        let obj = this.nonMovingKillers.create(tile.x, tile.y + 4, "itemsAndEnemies", "8x8/campfire-sprite-0.png");
+        let obj = this.nonMovingKillers.create(
+          tile.x,
+          tile.y + 4,
+          "itemsAndEnemies",
+          "8x8/campfire-sprite-0.png"
+        );
         obj.body.setSize(tile.width - 3, tile.height - 1);
         this.anims.play("campfire_burn", obj);
       });
   }
 
   setupWaterAndBones() {
-    const pitObjects = this.map.getObjectLayer("PitObjects");
-
-    this.anims.create({
-      key: "flow",
-      frames: this.anims.generateFrameNumbers("water_sprites", {
-        start: 0,
-        end: 1
-      }),
-      frameRate: 1,
-      repeat: -1
-    });
-
-    pitObjects.objects.forEach(tile => {
-      let texture = "water_sprites";
+    this.map.getObjectLayer("PitObjects").objects.forEach(tile => {
       if (tile.name === "bones") {
-        texture = "blank8x8";
-      }
-      let obj = this.nonMovingKillers.create(tile.x + 4, tile.y + 4, texture);
-      obj.body.width = tile.width;
-      obj.body.height = tile.height;
-      if (tile.name === "water") {
-        this.anims.play("flow", obj);
+        let bones = this.nonMovingKillers.create(
+          tile.x + 4,
+          tile.y + 4,
+          "itemsAndEnemies",
+          "8x8/blank.png"
+        );
+        bones.body.width = tile.width;
+        bones.body.height = tile.height;
+      } else if (tile.name === "water") {
+        let water = this.nonMovingKillers.create(
+          tile.x + 4,
+          tile.y + 4,
+          "itemsAndEnemies",
+          "8x8/water/0.png"
+        );
+        water.body.width = tile.width;
+        water.body.height = tile.height;
+        water.body.setSize(tile.width, tile.height);
+        this.anims.play("river_water", water);
       }
     });
   }
@@ -133,7 +107,6 @@ export class PlayScene extends Phaser.Scene {
     // create the player sprite
     this.player = new PlayerSprite(this, point.x, point.y, this.playerNum);
     this.player.usePhysics();
-    this.player.setupAnimations();
 
     // player will collide with the level tiles
     this.physics.add.collider(this.groundLayer, this.player);
@@ -167,7 +140,6 @@ export class PlayScene extends Phaser.Scene {
     const bossSpawn = this.spawnPoints.objects.filter(
       o => o.name === "boss"
     )[0];
-    console.log(bossSpawn);
 
     // create the player sprite
     this.boss = new Boss(this, bossSpawn, this.addLocket.bind(this));
@@ -198,7 +170,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   addLocket(x, y) {
-    this.locket = this.physics.add.sprite(x, y - 16, "locket");
+    this.locket = this.physics.add.sprite(x, y - 16, "itemsAndEnemies", "locket.png");
     this.locket.setCollideWorldBounds(true);
 
     this.locket.body.setSize(12, 12);
@@ -218,23 +190,37 @@ export class PlayScene extends Phaser.Scene {
     this.scene.start("BOOK");
   }
 
+  handleText() {
+    var config = {
+      image: 'retro_font',
+      width: 8,
+      height: 8,
+      chars: Phaser.GameObjects.RetroFont.TEXT_SET3,
+      charsPerRow: 11,
+      spacing: { x: 0, y: 0 }
+    };
+
+    this.cache.bitmapFont.add('retro_font', Phaser.GameObjects.RetroFont.Parse(this, config));
+
+    var dynamic = this.add.bitmapText(0, 0, 'retro_font', 'PHASER 3');
+  }
+
   create() {
     this.keys = this.input.keyboard.createCursorKeys();
     this.keys.x = this.input.keyboard.addKey("x");
     this.keys.space = this.input.keyboard.addKey("space");
 
+    setupAnimations(this);
+  
     this.setupMap();
 
     this.spawnPoints = this.map.getObjectLayer("SpawnPoints");
-
-    this.setupPlayer();
-
     this.nonMovingKillers = this.physics.add.staticGroup();
     this.movingKillers = this.physics.add.group();
 
-    this.setupWaterAndBones();
-
+    this.setupPlayer();
     this.setupCampfire();
+    this.setupWaterAndBones();
     this.setupWaterHand();
     this.setupBoss();
     this.setupFlyingObjects();
@@ -257,7 +243,10 @@ export class PlayScene extends Phaser.Scene {
     // make the camera follow the player
     this.cameras.main.startFollow(this.player);
 
-    console.log(this.fgLayer, this.map, this.player, this.bgLayer);
+    if (!this.music) {
+      this.music = this.sound.addAudioSprite('music')
+      this.music.play('stage')
+    }
   }
 
   checkSpawnPosition(playerX) {
@@ -278,6 +267,10 @@ export class PlayScene extends Phaser.Scene {
 
     if (this.cameras.main.scrollX >= 1728) {
       this.cameras.main.stopFollow();
+
+      if (this.music.currentMarker.name !== "boss") {
+        this.music.play("boss")
+      }
     }
   }
 

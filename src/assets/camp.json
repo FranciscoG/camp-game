@@ -379,17 +379,17 @@
                         {
                          "name":"endFrame",
                          "type":"int",
-                         "value":4
+                         "value":3
                         }, 
                         {
                          "name":"prefix",
                          "type":"string",
-                         "value":"uw-"
+                         "value":"8x8\/underwear\/"
                         }, 
                         {
                          "name":"startFrame",
                          "type":"int",
-                         "value":1
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"flying_object",
@@ -411,7 +411,7 @@
                         {
                          "name":"prefix",
                          "type":"string",
-                         "value":"branch"
+                         "value":"16x16\/branch-sprite"
                         }, 
                         {
                          "name":"startFrame",
@@ -433,24 +433,24 @@
                         {
                          "name":"endFrame",
                          "type":"int",
-                         "value":1
+                         "value":4
                         }, 
                         {
                          "name":"prefix",
                          "type":"string",
-                         "value":"book-"
+                         "value":"16x16\/book\/"
                         }, 
                         {
                          "name":"startFrame",
                          "type":"int",
-                         "value":4
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"flying_object",
                  "visible":true,
                  "width":16,
                  "x":1104,
-                 "y":72
+                 "y":64
                 }, 
                 {
                  "height":16,
@@ -460,24 +460,24 @@
                         {
                          "name":"endFrame",
                          "type":"int",
-                         "value":1
+                         "value":8
                         }, 
                         {
                          "name":"prefix",
                          "type":"string",
-                         "value":"towel-"
+                         "value":"16x16\/towel\/"
                         }, 
                         {
                          "name":"startFrame",
                          "type":"int",
-                         "value":9
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"flying_object",
                  "visible":true,
                  "width":16,
-                 "x":1472,
-                 "y":56
+                 "x":1488,
+                 "y":64
                 }, 
                 {
                  "height":8,

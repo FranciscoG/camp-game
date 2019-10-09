@@ -181,20 +181,54 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">16x16/book-sprite.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,4,32,8</rect>
-                <key>scale9Paddings</key>
-                <rect>16,4,32,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
+            <key type="filename">16x16/blank.png</key>
+            <key type="filename">16x16/book/0.png</key>
+            <key type="filename">16x16/book/1.png</key>
+            <key type="filename">16x16/book/2.png</key>
+            <key type="filename">16x16/book/3.png</key>
             <key type="filename">16x16/branch-sprite.png</key>
+            <key type="filename">16x16/hand/0.png</key>
+            <key type="filename">16x16/hand/1.png</key>
+            <key type="filename">16x16/hand/10.png</key>
+            <key type="filename">16x16/hand/11.png</key>
+            <key type="filename">16x16/hand/12.png</key>
+            <key type="filename">16x16/hand/13.png</key>
+            <key type="filename">16x16/hand/14.png</key>
+            <key type="filename">16x16/hand/15.png</key>
+            <key type="filename">16x16/hand/16.png</key>
+            <key type="filename">16x16/hand/2.png</key>
+            <key type="filename">16x16/hand/3.png</key>
+            <key type="filename">16x16/hand/4.png</key>
+            <key type="filename">16x16/hand/5.png</key>
+            <key type="filename">16x16/hand/6.png</key>
+            <key type="filename">16x16/hand/7.png</key>
+            <key type="filename">16x16/hand/8.png</key>
+            <key type="filename">16x16/hand/9.png</key>
+            <key type="filename">16x16/player/0.png</key>
+            <key type="filename">16x16/player/1.png</key>
+            <key type="filename">16x16/player/10.png</key>
+            <key type="filename">16x16/player/11.png</key>
+            <key type="filename">16x16/player/12.png</key>
+            <key type="filename">16x16/player/13.png</key>
+            <key type="filename">16x16/player/14.png</key>
+            <key type="filename">16x16/player/15.png</key>
+            <key type="filename">16x16/player/2.png</key>
+            <key type="filename">16x16/player/3.png</key>
+            <key type="filename">16x16/player/4.png</key>
+            <key type="filename">16x16/player/5.png</key>
+            <key type="filename">16x16/player/6.png</key>
+            <key type="filename">16x16/player/7.png</key>
+            <key type="filename">16x16/player/8.png</key>
+            <key type="filename">16x16/player/9.png</key>
+            <key type="filename">16x16/towel/0.png</key>
+            <key type="filename">16x16/towel/1.png</key>
+            <key type="filename">16x16/towel/2.png</key>
+            <key type="filename">16x16/towel/3.png</key>
+            <key type="filename">16x16/towel/4.png</key>
+            <key type="filename">16x16/towel/5.png</key>
+            <key type="filename">16x16/towel/6.png</key>
+            <key type="filename">16x16/towel/7.png</key>
+            <key type="filename">16x16/towel/8.png</key>
             <key type="filename">locket.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -208,62 +242,55 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">16x16/hand-sprite.png</key>
+            <key type="filename">16x32/fireball/0.png</key>
+            <key type="filename">16x32/fireball/1.png</key>
+            <key type="filename">16x32/fireball/10.png</key>
+            <key type="filename">16x32/fireball/11.png</key>
+            <key type="filename">16x32/fireball/12.png</key>
+            <key type="filename">16x32/fireball/13.png</key>
+            <key type="filename">16x32/fireball/14.png</key>
+            <key type="filename">16x32/fireball/15.png</key>
+            <key type="filename">16x32/fireball/2.png</key>
+            <key type="filename">16x32/fireball/3.png</key>
+            <key type="filename">16x32/fireball/4.png</key>
+            <key type="filename">16x32/fireball/5.png</key>
+            <key type="filename">16x32/fireball/6.png</key>
+            <key type="filename">16x32/fireball/7.png</key>
+            <key type="filename">16x32/fireball/8.png</key>
+            <key type="filename">16x32/fireball/9.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>72,4,144,8</rect>
+                <rect>4,8,8,16</rect>
                 <key>scale9Paddings</key>
-                <rect>72,4,144,8</rect>
+                <rect>4,8,8,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">16x16/towel-sprit.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>36,4,72,8</rect>
-                <key>scale9Paddings</key>
-                <rect>36,4,72,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">32x32/green-fireball-sprite.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>28,8,56,16</rect>
-                <key>scale9Paddings</key>
-                <rect>28,8,56,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">8x8/beads-sprite.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,2,24,4</rect>
-                <key>scale9Paddings</key>
-                <rect>12,2,24,4</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
+            <key type="filename">8x8/beads/0.png</key>
+            <key type="filename">8x8/beads/1.png</key>
+            <key type="filename">8x8/beads/2.png</key>
+            <key type="filename">8x8/beads/3.png</key>
+            <key type="filename">8x8/beads/4.png</key>
+            <key type="filename">8x8/beads/5.png</key>
+            <key type="filename">8x8/blank.png</key>
             <key type="filename">8x8/campfire-sprite-0.png</key>
             <key type="filename">8x8/campfire-sprite-1.png</key>
             <key type="filename">8x8/campfire-sprite-2.png</key>
             <key type="filename">8x8/campfire-sprite-3.png</key>
+            <key type="filename">8x8/skull/0.png</key>
+            <key type="filename">8x8/skull/1.png</key>
+            <key type="filename">8x8/skull/2.png</key>
+            <key type="filename">8x8/skull/3.png</key>
+            <key type="filename">8x8/underwear/0.png</key>
+            <key type="filename">8x8/underwear/1.png</key>
+            <key type="filename">8x8/underwear/2.png</key>
+            <key type="filename">8x8/underwear/3.png</key>
+            <key type="filename">8x8/water/0.png</key>
+            <key type="filename">8x8/water/1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -273,20 +300,6 @@
                 <rect>2,2,4,4</rect>
                 <key>scale9Paddings</key>
                 <rect>2,2,4,4</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">8x8/skull-sprite.png</key>
-            <key type="filename">8x8/underwear-sprite.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,2,16,4</rect>
-                <key>scale9Paddings</key>
-                <rect>8,2,16,4</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

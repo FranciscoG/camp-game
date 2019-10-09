@@ -8,11 +8,6 @@ import Phaser from "phaser";
  *  They would simply fly in from the right and go in a straight line off to 
  *  the left, like the skulls; you just jump over them:
 
-    1. underwear sprite -- 4 frames, 8x8 px   uw-01 -> uw-04
-    2. branch sprite -- static, 16x16 prefix   branch
-    3. book sprite -- 4 frames, 16x16 px    book-01 -> book-04
-    4. towel sprite -- 9 frames, 16x16 px   towel-01 -> towel-09
-
     config {
       x,
       y,
@@ -27,14 +22,15 @@ import Phaser from "phaser";
 
 export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, config) {
-    super(scene, config.x, config.y, config.key);
+    const half = config.size / 2;
+    super(scene, config.x, config.y + half, config.key);
 
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     this.body.allowGravity = false;
 
-    this.setOrigin(0, 0);
+    this.setOrigin(0.5, 0.5);
     this.body.setSize(config.size - 2, config.size - 2);
     this.setOffset(0, 0);
 
@@ -43,6 +39,8 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
     this.setupAnimations(config);
 
     this.body.setImmovable(true);
+    this.setActive(false);
+    this.setVisible(false);
 
     this.body.world.once(
       "worldbounds",
@@ -71,25 +69,26 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
   }
 
   setupAnimations(config) {
-    if (config.prefix === "branch") {
+    if (config.prefix === "16x16/branch-sprite") {
       this.animKey = "branch_fly";
       this.scene.anims.create({
         key: this.animKey,
-        frames: [{ key: "items16x16", frame: "branch" }]
+        frames: [{key: "itemsAndEnemies", frame: "16x16/branch-sprite.png"}]
       });
       return;
     }
 
-    let { size, key, prefix, startFrame, endFrame } = config;
+    let { key, prefix, startFrame, endFrame } = config;
     this.animKey = `${key}_flying`;
 
     this.scene.anims.create({
       key: this.animKey,
-      frames: this.scene.anims.generateFrameNames(`items${size}x${size}`, {
+      frames: this.scene.anims.generateFrameNames("itemsAndEnemies", {
         prefix: prefix,
         start: startFrame,
         end: endFrame,
-        zeroPad: 2
+        zeroPad: 1,
+        suffix: ".png"
       }),
       frameRate: 10,
       repeat: -1
@@ -97,6 +96,8 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
   }
 
   beginFlying() {
+    this.setActive(true);
+    this.setVisible(true);
     this.flying = true;
     this.anims.play(this.animKey, true);
     this.body.setVelocityX(-50);
