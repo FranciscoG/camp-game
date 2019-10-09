@@ -68,6 +68,30 @@ export class PlayScene extends Phaser.Scene {
       });
   }
 
+  setupBeads() {
+    this.beadGroup = this.physics.add.staticGroup();
+    this.spawnPoints.objects
+      .filter(f => f.name === "bead")
+      .forEach((bead, i) => {
+        let obj = this.beadGroup.create(
+          bead.x,
+          bead.y + 2,
+          "itemsAndEnemies",
+          `8x8/beads/${i}.png`
+        );
+        obj.setOrigin(0, 0)
+        obj.body.setSize(bead.width, bead.height);
+      });
+
+    this.physics.add.overlap(
+      this.player,
+      this.beadGroup,
+      this.updateText,
+      null,
+      this
+    );
+  }
+
   setupWaterAndBones() {
     this.map.getObjectLayer("PitObjects").objects.forEach(tile => {
       if (tile.name === "bones") {
@@ -170,7 +194,12 @@ export class PlayScene extends Phaser.Scene {
   }
 
   addLocket(x, y) {
-    this.locket = this.physics.add.sprite(x, y - 16, "itemsAndEnemies", "locket.png");
+    this.locket = this.physics.add.sprite(
+      x,
+      y - 16,
+      "itemsAndEnemies",
+      "locket.png"
+    );
     this.locket.setCollideWorldBounds(true);
 
     this.locket.body.setSize(12, 12);
@@ -190,9 +219,9 @@ export class PlayScene extends Phaser.Scene {
     this.scene.start("BOOK");
   }
 
-  handleText() {
+  setupText() {
     var config = {
-      image: 'retro_font',
+      image: "retro_font",
       width: 8,
       height: 8,
       chars: Phaser.GameObjects.RetroFont.TEXT_SET3,
@@ -200,9 +229,20 @@ export class PlayScene extends Phaser.Scene {
       spacing: { x: 0, y: 0 }
     };
 
-    this.cache.bitmapFont.add('retro_font', Phaser.GameObjects.RetroFont.Parse(this, config));
+    this.cache.bitmapFont.add(
+      "retro_font",
+      Phaser.GameObjects.RetroFont.Parse(this, config)
+    );
+    
+    this.beadCount = 0
+    this.beadText = this.add.bitmapText(0, 0, "retro_font", "BEADS 0");
+    this.beadText.setScrollFactor(0)
+  }
 
-    var dynamic = this.add.bitmapText(0, 0, 'retro_font', 'PHASER 3');
+  updateText(player, beadSprite) {
+    beadSprite.destroy()
+    this.beadCount++
+    this.beadText.setText(`BEADS ${this.beadCount}`)
   }
 
   create() {
@@ -211,7 +251,7 @@ export class PlayScene extends Phaser.Scene {
     this.keys.space = this.input.keyboard.addKey("space");
 
     setupAnimations(this);
-  
+
     this.setupMap();
 
     this.spawnPoints = this.map.getObjectLayer("SpawnPoints");
@@ -224,6 +264,8 @@ export class PlayScene extends Phaser.Scene {
     this.setupWaterHand();
     this.setupBoss();
     this.setupFlyingObjects();
+    this.setupBeads();
+    this.setupText()
 
     this.physics.add.overlap(
       this.player,
@@ -244,8 +286,8 @@ export class PlayScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player);
 
     if (!this.music) {
-      this.music = this.sound.addAudioSprite('music')
-      this.music.play('stage')
+      this.music = this.sound.addAudioSprite("music");
+      this.music.play("stage");
     }
   }
 
@@ -269,7 +311,7 @@ export class PlayScene extends Phaser.Scene {
       this.cameras.main.stopFollow();
 
       if (this.music.currentMarker.name !== "boss") {
-        this.music.play("boss")
+        this.music.play("boss");
       }
     }
   }

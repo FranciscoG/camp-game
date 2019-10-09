@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="232" height="15" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#82000000" nextlayerid="23" nextobjectid="50">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="232" height="15" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#82000000" nextlayerid="23" nextobjectid="56">
  <tileset firstgid="1" name="tileset" tilewidth="8" tileheight="8" tilecount="225" columns="15">
   <image source="tileset_2.png" width="120" height="120"/>
   <tile id="0" type="empty"/>
@@ -142,5 +142,11 @@
   <object id="47" name="player_spawn" type="6" x="1368" y="8" width="8" height="8"/>
   <object id="48" name="player_spawn" type="7" x="1736" y="8" width="8" height="8"/>
   <object id="49" name="camp_fire" x="1416" y="80" width="8" height="8"/>
+  <object id="50" name="bead" type="bead" x="392" y="80" width="8" height="8"/>
+  <object id="51" name="bead" type="bead" x="936" y="80" width="8" height="8"/>
+  <object id="52" name="bead" type="bead" x="1448" y="80" width="8" height="8"/>
+  <object id="53" name="bead" type="bead" x="176" y="80" width="8" height="8"/>
+  <object id="54" name="bead" type="bead" x="872" y="48" width="8" height="8"/>
+  <object id="55" name="bead" type="bead" x="1656" y="72" width="8" height="8"/>
  </objectgroup>
 </map>
