@@ -31,6 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   beginJump() {
     this.body.setVelocityY(JumpVelocity);
+    this.scene.soundFx.play("jump");
   }
 
   jumping() {
@@ -77,6 +78,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.dying = true
     this.body.setVelocityX(0);
     this.anims.play("player_hurt", true);
+    this.scene.music.play("player-death")
   }
 
   update(keys) {

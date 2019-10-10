@@ -32,9 +32,11 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
     });
     // make the skull a little faster
     this.skull.body.setVelocityX(-60);
+    this.scene.soundFx.play("fireball")
   }
 
   respawnSkull() {
+    this.scene.soundFx.play("fireball")
     this.skull.x = this.x;
     this.skull.setActive(true);
     this.skull.setVisible(true);

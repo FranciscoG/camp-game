@@ -21,7 +21,7 @@ export class LoadScene extends Phaser.Scene {
     /***********************************************
      * audio
      */
-    this.load.audioSprite("music", audioSpriteJson, [mp3]);
+    this.load.audioSprite("game_audio", audioSpriteJson, [mp3]);
 
     /***********************************************
      * SpriteSheets and images

@@ -73,13 +73,16 @@ export class PlayScene extends Phaser.Scene {
     this.spawnPoints.objects
       .filter(f => f.name === "bead")
       .forEach((bead, i) => {
-        console.log(bead)
+        if (this.beads.indexOf(bead.id) >= 0) {
+          return; // don't add already grabbed beads
+        }
         let obj = this.beadGroup.create(
           bead.x,
           bead.y + 2,
           "itemsAndEnemies",
           `8x8/beads/${i}.png`
         );
+        obj.beadId = bead.id
         obj.setOrigin(0, 0)
         obj.body.setSize(bead.width, bead.height);
       });
@@ -160,7 +163,8 @@ export class PlayScene extends Phaser.Scene {
     this.physics.world.bounds.height = this.bgLayer.height;
 
     // add a black rectangle at the top of the screen
-    this.blackRect = this.add.rectangle(0,0, 256, 32, 0x000000)
+    this.blackRect = this.add.rectangle(0,0, 128, 16, 0x000000)
+    this.blackRect.setOrigin(0,0)
     this.blackRect.setDepth(1);
     this.blackRect.setScrollFactor(0)
   }
@@ -222,7 +226,10 @@ export class PlayScene extends Phaser.Scene {
 
   grabLocket() {
     this.locket.destroy();
-    this.scene.start("BOOK");
+    this.soundFx.play("collect-bead")
+    setTimeout(()=>{
+      this.scene.start("BOOK");
+    }, 1500)
   }
 
   setupText() {
@@ -243,19 +250,20 @@ export class PlayScene extends Phaser.Scene {
     const playerName = this.playerNum === 1 ? "TEZ" : "CORRYN"
     this.add.bitmapText(2, 4, "retro_font", playerName).setScrollFactor(0).setDepth(2);
 
-    this.beadCount = 0
-    this.beadText = this.add.bitmapText(64, 4, "retro_font", "BEADS 0");
+    this.beadText = this.add.bitmapText(64, 4, "retro_font", `BEADS ${this.beads.length}`);
     this.beadText.setDepth(2)
     this.beadText.setScrollFactor(0)
   }
 
   grabBead(player, beadSprite) {
+    this.beads.push(beadSprite.beadId)
     beadSprite.destroy()
-    this.beadCount++
-    this.beadText.setText(`BEADS ${this.beadCount}`)
+    this.beadText.setText(`BEADS ${this.beads.length}`)
+    this.soundFx.play("collect-bead")
   }
 
   create() {
+    this.beads = this.beads || []
     this.keys = this.input.keyboard.createCursorKeys();
     this.keys.x = this.input.keyboard.addKey("x");
     this.keys.space = this.input.keyboard.addKey("space");
@@ -296,8 +304,13 @@ export class PlayScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player);
 
     if (!this.music) {
-      this.music = this.sound.addAudioSprite("music");
-      this.music.play("stage");
+      this.music = this.sound.addAudioSprite("game_audio");
+    }
+
+    this.music.play("stage");
+
+    if (!this.soundFx) {
+      this.soundFx = this.sound.addAudioSprite("game_audio");
     }
   }
 

@@ -1,13 +1,13 @@
 import Phaser from "phaser";
 
-export default class BookCoverScene extends Phaser.Scene {
+export default class CreditsScene extends Phaser.Scene {
   constructor() {
-    super({ key: "BOOK" });
+    super({ key: "CREDITS" });
   }
 
   create() {
-    this.scale.setGameSize(520, 480);
-    this.scale.setZoom(1)
+    this.scale.setGameSize(128, 120);
+    this.scale.setZoom(4)
 
     this.keys = {
       x : this.input.keyboard.addKey('x'),
@@ -15,7 +15,8 @@ export default class BookCoverScene extends Phaser.Scene {
       enter : this.input.keyboard.addKey('enter')
     }
 
-    this.add.image(520/2, 480/2, "bookCover")
+    this.creditImage = this.add.sprite(0,0,"main_screens","credits");
+    this.creditImage.setOrigin(0,0)
 
     this.sound.stopAll()
     this.music = this.sound.addAudioSprite('game_audio')
@@ -27,7 +28,7 @@ export default class BookCoverScene extends Phaser.Scene {
       || this.keys.space.isDown
       || this.keys.enter.isDown
     ) {
-      this.scene.start("CREDITS");
+      this.scene.start("MENU");
     }
   }
 }
