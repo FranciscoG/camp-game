@@ -339,7 +339,7 @@ export class PlayScene extends Phaser.Scene {
     if (this.cameras.main.scrollX >= this.bossSection) {
       this.cameras.main.stopFollow();
 
-      if (this.music.currentMarker.name !== "boss") {
+      if (this.music.currentMarker.name !== "boss" && !this.deathTimeout) {
         this.music.play("boss");
       }
     }
