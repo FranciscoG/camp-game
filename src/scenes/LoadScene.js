@@ -1,12 +1,14 @@
 import Phaser from "phaser";
+
 import campMap from "../assets/camp.json";
 import campMapTiles from "../assets/tileset.png";
-import mainScreensSprites from "../assets/main_screens.png";
-import mainScreensJson from "../assets/main_screens.json";
+
 import bookcover from "../assets/book-cover-screen-4x.png";
 import pixelFontimg from "../assets/font/pixel_font.png";
-import itemsAndEnemies from "../assets/items_and_enemies.json";
-import "../assets/items_and_enemies.png";
+
+import sprite_sheet from "../assets/sprite_sheet.json";
+import "../assets/sprite_sheet.png";
+
 import mp3 from "../assets/audio/gamemusic.mp3";
 import audioSpriteJson from "../assets/audio/gamemusic.json";
 
@@ -26,10 +28,7 @@ export class LoadScene extends Phaser.Scene {
     /***********************************************
      * SpriteSheets and images
      */
-    this.load.multiatlas("itemsAndEnemies", itemsAndEnemies, "assets");
-
-    // main screens (title, player select, credits) and all npc items and stuff
-    this.load.atlas("main_screens", mainScreensSprites, mainScreensJson);
+    this.load.multiatlas("all_sprites", sprite_sheet, "assets");
     this.load.image("bookCover", bookcover);
     this.load.image("retro_font", pixelFontimg);
 

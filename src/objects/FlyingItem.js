@@ -73,7 +73,7 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
       this.animKey = "branch_fly";
       this.scene.anims.create({
         key: this.animKey,
-        frames: [{key: "itemsAndEnemies", frame: "16x16/branch-sprite.png"}]
+        frames: [{key: "all_sprites", frame: "16x16/branch-sprite.png"}]
       });
       return;
     }
@@ -83,7 +83,7 @@ export default class FlyingItem extends Phaser.Physics.Arcade.Sprite {
 
     this.scene.anims.create({
       key: this.animKey,
-      frames: this.scene.anims.generateFrameNames("itemsAndEnemies", {
+      frames: this.scene.anims.generateFrameNames("all_sprites", {
         prefix: prefix,
         start: startFrame,
         end: endFrame,

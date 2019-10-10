@@ -12,8 +12,7 @@ export default class TitleScene extends Phaser.Scene {
       enter : this.input.keyboard.addKey('enter')
     }
 
-    this.add.sprite(64,60,"main_screens","title-screen");
-
+    this.add.sprite(0,0,"all_sprites","screens/title-screen.png");
   }
 
   update() {

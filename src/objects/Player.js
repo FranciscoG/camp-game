@@ -75,10 +75,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   death() {
+    this.scene.music.play("player-death")
     this.dying = true
     this.body.setVelocityX(0);
     this.anims.play("player_hurt", true);
-    this.scene.music.play("player-death")
   }
 
   update(keys) {

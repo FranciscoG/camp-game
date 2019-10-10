@@ -15,8 +15,7 @@ export default class CreditsScene extends Phaser.Scene {
       enter : this.input.keyboard.addKey('enter')
     }
 
-    this.creditImage = this.add.sprite(0,0,"main_screens","credits");
-    this.creditImage.setOrigin(0,0)
+    this.creditImage = this.add.sprite(0,0,"all_sprites","screens/credits.png");
 
     this.sound.stopAll()
     this.music = this.sound.addAudioSprite('game_audio')

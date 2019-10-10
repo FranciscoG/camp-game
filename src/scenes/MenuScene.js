@@ -15,8 +15,8 @@ export class MenuScene extends Phaser.Scene {
     this.keys.space = this.input.keyboard.addKey('space')
     this.keys.enter = this.input.keyboard.addKey('enter')
 
-    this.sprite1 = this.add.sprite(64,60,"main_screens","player-select-01");
-    this.sprite2 = this.add.sprite(64,60,"main_screens","player-select-02");
+    this.sprite1 = this.add.sprite(0,0,"all_sprites","screens/player-select-01.png");
+    this.sprite2 = this.add.sprite(0,0,"all_sprites","screens/player-select-02.png");
     this.sprite2.visible = false
   }
 

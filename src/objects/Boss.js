@@ -46,10 +46,13 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
   bossDying() {
     this.bossDead = true;
     this.anims.play("boss_death", true);
-    setTimeout(() => {
-      this.onBossDeath(this.x, this.y);
-      this.destroy();
-    }, 1000);
+    this.scene.time.addEvent({
+      delay: 1000,  
+      callback: () => {
+        this.onBossDeath(this.x, this.y);
+        this.destroy();
+      }
+    });
   }
 
   update(time, delta) {
@@ -80,13 +83,15 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
     if (
       this.scene.cameras.main.worldView.contains(this.x, this.y) &&
-      this.scene.cameras.main.scrollX >= 1728
+      this.scene.cameras.main.scrollX >= this.scene.bossSection
     ) {
       this.setActive(true);
       this.setVisible(true);
-      setTimeout(() => {
-        this.addSkulls();
-      }, 1000);
+      this.scene.time.addEvent({
+        delay: 1000,  
+        callback: this.addSkulls,
+        callbackScope: this
+      });
     }
   }
 }

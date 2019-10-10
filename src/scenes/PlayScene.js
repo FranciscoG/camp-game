@@ -37,7 +37,7 @@ export class PlayScene extends Phaser.Scene {
         let obj = this.nonMovingKillers.create(
           tile.x + 8,
           tile.y + 8,
-          "itemsAndEnemies",
+          "all_sprites",
           "16x16/hand/0.png"
         );
         const hitWidth = tile.width - 10;
@@ -45,7 +45,7 @@ export class PlayScene extends Phaser.Scene {
         this.anims.play("water_hand_rise", obj);
         obj.on("animationupdate-water_hand_rise", function(anim, frame) {
           if (frame.index >= 3) {
-            obj.body.setSize(hitWidth, 16 - (frame.index - 3));
+            obj.body.setSize(hitWidth, 15 - (frame.index - 3));
           } else {
             obj.body.setSize(hitWidth, 0);
           }
@@ -60,7 +60,7 @@ export class PlayScene extends Phaser.Scene {
         let obj = this.nonMovingKillers.create(
           tile.x,
           tile.y + 4,
-          "itemsAndEnemies",
+          "all_sprites",
           "8x8/campfire-sprite-0.png"
         );
         obj.body.setSize(tile.width - 3, tile.height - 1);
@@ -79,11 +79,11 @@ export class PlayScene extends Phaser.Scene {
         let obj = this.beadGroup.create(
           bead.x,
           bead.y + 2,
-          "itemsAndEnemies",
+          "all_sprites",
           `8x8/beads/${i}.png`
         );
-        obj.beadId = bead.id
         obj.setOrigin(0, 0)
+        obj.beadId = bead.id
         obj.body.setSize(bead.width, bead.height);
       });
 
@@ -102,7 +102,7 @@ export class PlayScene extends Phaser.Scene {
         let bones = this.nonMovingKillers.create(
           tile.x + 4,
           tile.y + 4,
-          "itemsAndEnemies",
+          "all_sprites",
           "8x8/blank.png"
         );
         bones.body.width = tile.width;
@@ -111,7 +111,7 @@ export class PlayScene extends Phaser.Scene {
         let water = this.nonMovingKillers.create(
           tile.x + 4,
           tile.y + 4,
-          "itemsAndEnemies",
+          "all_sprites",
           "8x8/water/0.png"
         );
         water.body.width = tile.width;
@@ -162,6 +162,8 @@ export class PlayScene extends Phaser.Scene {
     this.physics.world.bounds.width = this.bgLayer.width;
     this.physics.world.bounds.height = this.bgLayer.height;
 
+    this.bossSection = this.bgLayer.width - this.game.config.width
+    
     // add a black rectangle at the top of the screen
     this.blackRect = this.add.rectangle(0,0, 128, 16, 0x000000)
     this.blackRect.setOrigin(0,0)
@@ -170,7 +172,6 @@ export class PlayScene extends Phaser.Scene {
   }
 
   setupBoss() {
-    // get player spawn point
     const bossSpawn = this.spawnPoints.objects.filter(
       o => o.name === "boss"
     )[0];
@@ -178,7 +179,7 @@ export class PlayScene extends Phaser.Scene {
     // create the player sprite
     this.boss = new Boss(this, bossSpawn, this.addLocket.bind(this));
 
-    // player will collide with the level tiles
+    // make boss collide with ground layer
     this.physics.add.collider(this.groundLayer, this.boss);
   }
 
@@ -207,7 +208,7 @@ export class PlayScene extends Phaser.Scene {
     this.locket = this.physics.add.sprite(
       x,
       y - 16,
-      "itemsAndEnemies",
+      "all_sprites",
       "locket.png"
     );
     this.locket.setCollideWorldBounds(true);
@@ -227,9 +228,10 @@ export class PlayScene extends Phaser.Scene {
   grabLocket() {
     this.locket.destroy();
     this.soundFx.play("collect-bead")
-    setTimeout(()=>{
-      this.scene.start("BOOK");
-    }, 1500)
+    this.time.addEvent({
+      delay: 1500,  
+      callback: ()=> this.scene.start("BOOK")
+    });
   }
 
   setupText() {
@@ -305,9 +307,13 @@ export class PlayScene extends Phaser.Scene {
 
     if (!this.music) {
       this.music = this.sound.addAudioSprite("game_audio");
+      this.music.play("stage");
+    } else {
+      this.time.addEvent({
+        delay: 750,  
+        callback: ()=> this.music.play("stage")
+      });
     }
-
-    this.music.play("stage");
 
     if (!this.soundFx) {
       this.soundFx = this.sound.addAudioSprite("game_audio");
@@ -330,7 +336,7 @@ export class PlayScene extends Phaser.Scene {
     this.flyingSprites.forEach(x => x.update(time, delta));
     this.checkSpawnPosition(this.player.x);
 
-    if (this.cameras.main.scrollX >= 1728) {
+    if (this.cameras.main.scrollX >= this.bossSection) {
       this.cameras.main.stopFollow();
 
       if (this.music.currentMarker.name !== "boss") {
@@ -350,9 +356,10 @@ export class PlayScene extends Phaser.Scene {
     }
 
     this.player.death();
-    this.deathTimeout = setTimeout(() => {
+    
+    this.deathTimeout = setTimeout(()=>{
       this.scene.restart();
       this.deathTimeout = null;
-    }, 750);
+    }, 750)
   }
 }
