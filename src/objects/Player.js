@@ -93,18 +93,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.jumping()
     }
 
-    if (keys.left.isDown) {
+    if (keys.LEFT.isDown || keys.A.isDown) {
       this.moveLeft(onFloor)
-    } else if (keys.right.isDown) {
+    } else if (keys.RIGHT.isDown || keys.D.isDown) {
       this.moveRight(onFloor)
-    } else if (keys.down.isDown && onFloor) {
+    } else if ((keys.DOWN.isDown || keys.S.isDown) && onFloor) {
       this.crouch()
     } else if (onFloor) {
       this.stand()
       this.stopMoving()
     }
 
-    if ((keys.up.isDown || keys.space.isDown) && onFloor) {
+    if ((keys.UP.isDown || keys.space.isDown || keys.W.isDown) && onFloor) {
       this.beginJump()
     }
   }
