@@ -16,10 +16,6 @@ export default class BookCoverScene extends Phaser.Scene {
     }
 
     this.add.image(520/2, 480/2, "bookCover")
-
-    this.sound.stopAll()
-    this.music = this.sound.addAudioSprite('game_audio')
-    this.music.play('stage')
   }
 
   update() {

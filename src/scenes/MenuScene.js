@@ -18,6 +18,8 @@ export class MenuScene extends Phaser.Scene {
     this.sprite1 = this.add.sprite(0,0,"all_sprites","screens/player-select-01.png");
     this.sprite2 = this.add.sprite(0,0,"all_sprites","screens/player-select-02.png");
     this.sprite2.visible = false
+
+    this.sound.stopAll()
   }
 
   update() {

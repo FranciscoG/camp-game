@@ -303,6 +303,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">screens/congrats.png</key>
             <key type="filename">screens/credits.png</key>
             <key type="filename">screens/player-select-01.png</key>
             <key type="filename">screens/player-select-02.png</key>
@@ -329,7 +330,9 @@
         <key>replaceList</key>
         <array/>
         <key>ignoredWarnings</key>
-        <array/>
+        <array>
+            <string>phaser3-exporter-beta</string>
+        </array>
         <key>commonDivisorX</key>
         <uint>1</uint>
         <key>commonDivisorY</key>

@@ -9,11 +9,11 @@ var debugStart = parseInt(location.hash.substring(1), 10);
 if (isNaN(debugStart) || !debugStart) {
   debugStart = 1;
 }
-var spawnPointNum = debugStart;
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
     super({ key: "PLAY" });
+    this.spawnPointNum = debugStart;
   }
 
   init(data) {
@@ -129,7 +129,7 @@ export class PlayScene extends Phaser.Scene {
     );
 
     const point = this.playerSpawnPoints.filter(
-      x => parseInt(x.type, 10) === spawnPointNum
+      x => parseInt(x.type, 10) === this.spawnPointNum
     )[0];
 
     // create the player sprite
@@ -230,7 +230,7 @@ export class PlayScene extends Phaser.Scene {
     this.soundFx.play("collect-bead")
     this.time.addEvent({
       delay: 1500,  
-      callback: ()=> this.scene.start("BOOK")
+      callback: ()=> this.scene.start("END")
     });
   }
 
@@ -325,7 +325,7 @@ export class PlayScene extends Phaser.Scene {
       let type = parseInt(point.type, 10);
       let x = point.x;
       if (playerX > x) {
-        spawnPointNum = type;
+        this.spawnPointNum = type;
       }
     });
   }

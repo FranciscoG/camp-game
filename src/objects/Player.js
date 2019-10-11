@@ -7,7 +7,7 @@ const LeftRunVelocity = RightRunVelocity * -1;
 const JumpVelocity = (gravity / 3.5) * -1;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y, playerNum) {
+  constructor(scene, x, y) {
     console.log("constructing new player")
     super(scene, x, y, "player");
     scene.add.existing(this);

@@ -5,7 +5,7 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 256,
-				"h": 352
+				"h": 472
 			},
 			"scale": 1,
 			"frames": [
@@ -2160,7 +2160,7 @@
 					}
 				},
 				{
-					"filename": "screens/credits.png",
+					"filename": "screens/congrats.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2175,6 +2175,31 @@
 					},
 					"frame": {
 						"x": 0,
+						"y": 112,
+						"w": 128,
+						"h": 120
+					},
+					"anchor": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"filename": "screens/credits.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 120
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 120
+					},
+					"frame": {
+						"x": 128,
 						"y": 112,
 						"w": 128,
 						"h": 120
@@ -2199,8 +2224,8 @@
 						"h": 120
 					},
 					"frame": {
-						"x": 128,
-						"y": 112,
+						"x": 0,
+						"y": 232,
 						"w": 128,
 						"h": 120
 					},
@@ -2224,7 +2249,7 @@
 						"h": 120
 					},
 					"frame": {
-						"x": 0,
+						"x": 128,
 						"y": 232,
 						"w": 128,
 						"h": 120
@@ -2249,8 +2274,8 @@
 						"h": 120
 					},
 					"frame": {
-						"x": 128,
-						"y": 232,
+						"x": 0,
+						"y": 352,
 						"w": 128,
 						"h": 120
 					},
@@ -2265,6 +2290,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:261e77182aff8ee71416055b869cfc85:6d3e8f887612745ead68ce5fd244b6f1:6cc8953523e0367402f95f3c9a630665$"
+		"smartupdate": "$TexturePacker:SmartUpdate:7a0880eeff738184d726c89f144124fc:97b6a592d83ad250b14f7bb380471991:6cc8953523e0367402f95f3c9a630665$"
 	}
 }

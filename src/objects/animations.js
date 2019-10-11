@@ -82,10 +82,12 @@ export default function(scene) {
     repeat: 0
   });
 
-  const i = scene.playerNum === 2 ? 8 : 0;
   /** 
-   * Player 1
+   * Player 1 is sprites 0 - 7
+   * Player 2 is sprites 8 - 15
    */
+  const i = scene.playerNum === 2 ? 8 : 0;
+
   scene.anims.create({
     key: "player_stand",
     frames: [{key: "all_sprites", frame: `16x16/player/${0+i}.png` }]
