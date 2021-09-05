@@ -47,7 +47,10 @@ module.exports = {
       template: "./index.html",
       chunks: ["vendor", "main"],
       chunksSortMode: "manual",
-      hash: false
+      hash: false,
+      templateParameters: {
+        phaserScript: '',
+      },
     })
   ]
 };
