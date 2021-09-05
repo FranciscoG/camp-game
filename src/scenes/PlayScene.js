@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import BaseScene from "./BaseScene";
 import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
 import PlayerSprite from "../objects/Player";
 import Boss from "../objects/Boss";
@@ -10,7 +11,7 @@ if (isNaN(debugStart) || !debugStart) {
   debugStart = 1;
 }
 
-export class PlayScene extends Phaser.Scene {
+export class PlayScene extends BaseScene {
   constructor() {
     super({ key: "PLAY" });
     this.spawnPointNum = debugStart;
@@ -165,7 +166,7 @@ export class PlayScene extends Phaser.Scene {
     this.bossSection = this.bgLayer.width - this.game.config.width
     
     // add a black rectangle at the top of the screen
-    this.blackRect = this.add.rectangle(0,0, 128, 16, 0x000000)
+    this.blackRect = this.add.rectangle(0,0, this.game.config.width, 16, 0x000000)
     this.blackRect.setOrigin(0,0)
     this.blackRect.setDepth(1);
     this.blackRect.setScrollFactor(0)
@@ -266,9 +267,8 @@ export class PlayScene extends Phaser.Scene {
 
   create() {
     this.beads = this.beads || []
-    this.keys = this.input.keyboard.createCursorKeys();
-    this.keys.x = this.input.keyboard.addKey("x");
-    this.keys.space = this.input.keyboard.addKey("space");
+    this.keys = this.input.keyboard.addKeys('W,S,A,D,UP,LEFT,DOWN,RIGHT');
+    this.baseControls()
 
     setupAnimations(this);
 
@@ -318,6 +318,8 @@ export class PlayScene extends Phaser.Scene {
     if (!this.soundFx) {
       this.soundFx = this.sound.addAudioSprite("game_audio");
     }
+
+    this.volumeControl()
   }
 
   checkSpawnPosition(playerX) {

@@ -1,6 +1,7 @@
 import Phaser from "phaser";
+import BaseScene from "./BaseScene"
 
-export default class BookCoverScene extends Phaser.Scene {
+export default class BookCoverScene extends BaseScene {
   constructor() {
     super({ key: "BOOK" });
   }
@@ -8,21 +9,13 @@ export default class BookCoverScene extends Phaser.Scene {
   create() {
     this.scale.setGameSize(520, 480);
     this.scale.setZoom(1)
-
-    this.keys = {
-      x : this.input.keyboard.addKey('x'),
-      space : this.input.keyboard.addKey('space'),
-      enter : this.input.keyboard.addKey('enter')
-    }
+    this.baseControls()
 
     this.add.image(520/2, 480/2, "bookCover")
   }
 
   update() {
-  if (this.keys.x.isDown 
-      || this.keys.space.isDown
-      || this.keys.enter.isDown
-    ) {
+  if (this.actionKeyDown) {
       this.scene.start("CREDITS");
     }
   }

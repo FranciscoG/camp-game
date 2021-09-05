@@ -1,6 +1,6 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene"
 
-export default class CreditsScene extends Phaser.Scene {
+export default class CreditsScene extends BaseScene {
   constructor() {
     super({ key: "CREDITS" });
   }
@@ -8,12 +8,7 @@ export default class CreditsScene extends Phaser.Scene {
   create() {
     this.scale.setGameSize(128, 120);
     this.scale.setZoom(4);
-
-    this.keys = {
-      x: this.input.keyboard.addKey("x"),
-      space: this.input.keyboard.addKey("space"),
-      enter: this.input.keyboard.addKey("enter")
-    };
+    this.baseControls()
 
     this.creditImage = this.add.sprite(
       0,
@@ -41,11 +36,7 @@ export default class CreditsScene extends Phaser.Scene {
   }
 
   update() {
-    if (
-      this.keys.x.isDown ||
-      this.keys.space.isDown ||
-      this.keys.enter.isDown
-    ) {
+    if (this.actionKeyDown) {
       this.scene.start("MENU");
     }
   }
